@@ -4,35 +4,29 @@ import board.Board;
 import board.BoardField;
 import board.Field;
 
-    /*
-    |18|  |  |  |  |  |  |  |
-    |  |27|  |  |  |  |  |87|
-    |  |  |36|  |  |  |76|  |
-    |  |  |  |45|  |65|  |  |
-    |  |  |  |  |::|  |  |  |
-    |  |  |  |43|  |63|  |  |
-    |  |  |32|  |  |  |72|  |
-    |  |21|  |  |  |  |  |81|
-
-     */
-public class Strelec extends AbstractFigure{
-    public Strelec(int col, int row, boolean isWhite){
+public class Dama extends AbstractFigure {
+    public Dama(int col, int row, boolean isWhite){
         super(col, row, isWhite);
     }
 
     @Override
     public String getState() {
-        return "S["+(this.isWhite ? "W" : "B")+"]"+Integer.toString(this.col)+":"+Integer.toString(this.row);
+        return "Q["+(this.isWhite ? "W" : "B")+"]"+Integer.toString(this.col)+":"+Integer.toString(this.row);
     }
 
-    //TODO otestovat
+    /*
+    |  |24|  |44|
+    |13|23|33|  |
+    |12|::|32|42|
+    |11|21|31|  |
+     */
+    //TODOotestovat
     @Override
     public boolean move(Field field, Board board) {
 
-        /*kontrola, že pohyb není po přímce*/
-        if( ((BoardField)field).getCol() == this.col || ((BoardField)field).getRow() == this.row){
-            return false;
-        }
+
+
+
 
         /* pohyb na místo, na kterém se právě nachází */
         if(field.getCol() == this.col && field.getRow() == this.row)
@@ -42,16 +36,23 @@ public class Strelec extends AbstractFigure{
         int endCol = (((BoardField)field).getCol() > this.col ? ((BoardField)field).getCol() : this.col);
         int endRow = (((BoardField)field).getRow() > this.row ? ((BoardField)field).getRow() : this.row);
 
-        /*do @startCol a endRow se uloží vždy to nižší číslo*/
+        /*do @endCol a endRow se uloží vždy to nižší číslo*/
         int startCol = (((BoardField)field).getCol() < this.col ? ((BoardField)field).getCol() : this.col);
         int startRow = (((BoardField)field).getRow() < this.row ? ((BoardField)field).getRow() : this.row);
 
+        /*prochýzení vždy z prava do leva a zespodu nahoru jestli něco nestojí v cestě */
         while(!(startCol == endCol && startRow == endRow)){
-            if(startRow != endRow){
+            if(startRow != endRow && startCol == endCol){
+                startRow++;
+            }
+            else if (startCol != endCol && startRow == endRow){
+                startCol++;
+            }
+            else {
                 startRow++;
                 startCol++;
             }
-            if(startRow > endRow || startCol > endCol){
+            if (startRow > endRow || startCol > endCol){
                 return false;
             }
 
@@ -60,14 +61,14 @@ public class Strelec extends AbstractFigure{
             }
         }
 
-        /*odstranění cizího hráče*/
+
+        /*odstranění cizího hráče, pokud to není moje figurka*/
         if(field.get() != null && field.get().isWhite() != this.isWhite){
             field.remove();
-        }else {return false;}
-        //TODO myslím si, že nekontroluji jestli tam není vlastní hráč
+        }else{return false;}
+
         this.reposition(field,board);
         return true;
-
 
     }
 }

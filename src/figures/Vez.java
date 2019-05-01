@@ -4,6 +4,16 @@ import board.Board;
 import board.BoardField;
 import board.Field;
 
+    /*
+    |  |  |  |48|  |  |  |  |
+    |  |  |  |47|  |  |  |  |
+    |  |  |  |46|  |  |  |  |
+    |  |  |  |45|  |  |  |  |
+    |14|24|34|::|54|64|74|84|
+    |  |  |  |43|  |  |  |  |
+    |  |  |  |42|  |  |  |  |
+    |  |  |  |41|  |  |  |  |
+     */
 public class Vez extends AbstractFigure {
     public Vez(int col, int row, boolean isWhite){
         super(col, row, isWhite);
@@ -18,7 +28,7 @@ public class Vez extends AbstractFigure {
     @Override
     public boolean move(Field field, Board board){
 
-        /**/
+        /*test jestli tah není do úhlopříčky vždy musí alespoň jedna souřadnice být stejná*/
         if( ((BoardField)field).getCol() != this.col && ((BoardField)field).getRow() != this.row){
             return false;
         }
@@ -41,10 +51,7 @@ public class Vez extends AbstractFigure {
         }
         */
 
-        if(field.get() != null && field.get().isWhite() != this.isWhite){
-            field.remove();
-        }
-
+        /*prochýzení vždy z prava do leva a zespodu nahoru jestli něco nestojí v cestě */
         while(!(startCol == endCol && startRow == endRow)){
             if(startRow != endRow){
                 startRow++;
@@ -56,6 +63,10 @@ public class Vez extends AbstractFigure {
                 return false;
             }
         }
+        /*odstranění cizího hráče*/
+        if(field.get() != null && field.get().isWhite() != this.isWhite){
+            field.remove();
+        } else {return false;}
 
         this.reposition(field,board);
         return true;

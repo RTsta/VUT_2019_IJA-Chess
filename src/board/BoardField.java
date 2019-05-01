@@ -27,12 +27,12 @@ public class BoardField implements Field {
         return !(this.figure != null);
     }
 
-    public boolean put(Figure disk){
+    public boolean put(Figure figure){
         if(!this.isEmpty()){
             return false;
         }
         else {
-            this.figure = disk;
+            this.figure = figure;
             this.figure.setColRow(this.col, this.row);
             return true;
         }
