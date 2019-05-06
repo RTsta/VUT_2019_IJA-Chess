@@ -4,7 +4,7 @@ import figures.*;
 
 import java.util.Stack;
 
-public class ChessGame implements Game{
+public class ChessGame implements Game {
 
     private Board board;
     private Stack<Move> stack;
@@ -57,6 +57,10 @@ public class ChessGame implements Game{
         }
     }
 
+    public Board getBoard(){
+        return this.board;
+    }
+
     @Override
     public boolean move(Figure figure, Field field){
         Field prevf = this.board.getField(figure.getCol(), figure.getRow());
@@ -81,7 +85,6 @@ public class ChessGame implements Game{
 
         }
     }
-
 
     private class Move{
 
