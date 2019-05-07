@@ -1,5 +1,6 @@
 import board.Board;
 import board.Field;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -29,7 +30,7 @@ public class ChessTab extends Tab {
 
         Board b = new Board(SIZE);
         this.chessGame = new ChessGame(b);
-        this.chessGrid = createNewChessGame();
+        this.chessGrid = createNewChessBoard();
         super.setContent(chessGrid);
         super.setText(name);
         displayGame();
@@ -39,7 +40,7 @@ public class ChessTab extends Tab {
         destClick = "";
     }
 
-    GridPane createNewChessGame(){
+    GridPane createNewChessBoard(){
 
             /*
         |VC|KC|SC|KC|DC|SC|KC|VC|  *  |18|28|38|48|58|68|78|88|
@@ -94,30 +95,22 @@ public class ChessTab extends Tab {
         return chessGrid;
     }
 
-    private Node getChessTileAtCords(int row, int col){
-        for (Node child : chessGrid.getChildren()){
-            if (GridPane.getRowIndex(child) == row && GridPane.getColumnIndex(child) == col){
-                return child;
+    public void displayGame() {
+        Board b = this.chessGame.getBoard();
+
+        if (chessGrid.getChildren().size() > 64) {
+            for (int i = chessGrid.getChildren().size()-1; i > 63; i--){
+                chessGrid.getChildren().remove(i);
             }
         }
-        //Rychlejší alternativa
-        //chessGrid.lookup((row)*10+(col)+"");
-
-        return null;
-    }
-
-    public void displayGame() {
-
-        Board b = chessGame.getBoard();
 
         for (int row = 0; row < SIZE; row++) {
             int c_id = SIZE-row;
             int r_id = 1;
 
             for (int col = 0; col < SIZE; col ++) {
-                //System.out.println("Figurka: row-"+(c_id+col)+",col-"+r_id+" | Policko: "+ (col*10+row));
+                String curFieldID = (r_id)*10+(col+c_id)+"";
 
-                //String squareID = (r_id)*10+(col+c_id)+"";
                 Field f = b.getField(r_id, (col+c_id));
                 ImageView iv1;
                 if (f.get() == null){
@@ -233,12 +226,21 @@ public class ChessTab extends Tab {
     }
 
 
-            private int parseColFromID(String id){
+    private int parseColFromID(String id){
         return Integer.parseInt(id)/10;
     }
 
     private int parseRowFromID(String id){
         return Integer.parseInt(id)%10;
+    }
+
+    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
+        for (Node node : gridPane.getChildren()) {
+            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
+                return node;
+            }
+        }
+        return null;
     }
 
 }
