@@ -62,10 +62,12 @@ public class Dama extends AbstractFigure {
         }
 
 
-        /*odstranění cizího hráče, pokud to není moje figurka*/
-        if(field.get() != null && field.get().isWhite() != this.isWhite){
-            field.remove();
-        }else{return false;}
+        /*odstranění cizího hráče*/
+        if (field.get() != null){
+            if (field.get().isWhite() != this.isWhite){
+                field.remove();
+            } else {return false;}
+        }
 
         this.reposition(field,board);
         return true;

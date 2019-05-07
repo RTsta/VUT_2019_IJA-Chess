@@ -20,6 +20,9 @@ public class ChessTab extends Tab {
     String COLORB = "#7D7D7D";
     String COLORW = "white";
     Boolean evenClick;
+    String srcClick;
+    String destClick;
+
 
     public ChessTab(String name){
         super();
@@ -31,6 +34,9 @@ public class ChessTab extends Tab {
         super.setText(name);
         displayGame();
         evenClick = true;
+
+        srcClick = "";
+        destClick = "";
     }
 
     GridPane createNewChessGame(){
@@ -69,13 +75,7 @@ public class ChessTab extends Tab {
                 square.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        if (evenClick) {
-                            System.out.println("Clicked at "+square.getId());
-                            evenClick = false;
-                        } else {
-                            System.out.println("Clicked at "+square.getId());
-                            evenClick = true;
-                        }
+                        gameMove(square.getId());
                     }
                 });
 
@@ -115,20 +115,13 @@ public class ChessTab extends Tab {
             int r_id = 1;
 
             for (int col = 0; col < SIZE; col ++) {
-                System.out.println("Figurka: row-"+(c_id+col)+",col-"+r_id+" | Policko: "+ (col*10+row));
+                //System.out.println("Figurka: row-"+(c_id+col)+",col-"+r_id+" | Policko: "+ (col*10+row));
 
                 //String squareID = (r_id)*10+(col+c_id)+"";
                 Field f = b.getField(r_id, (col+c_id));
                 ImageView iv1;
                 if (f.get() == null){
                     iv1 = new ImageView(new Image("/GUI/figureImages/empty.png"));
-                    String color ;
-                    if ((row + col) % 2 == 0) {
-                        color = COLORW;
-                    } else {
-                        color = COLORB;
-                    }
-                    iv1.setStyle("-fx-background-color: "+color+";");
                 } else {
                     switch (f.get().getClass().getName().toLowerCase()) {
                         case "figures.kral":
@@ -192,18 +185,12 @@ public class ChessTab extends Tab {
                     }
                 }
                 if (iv1 != null) {
-                    iv1.setId((col * 10 + row) + "");
+                    iv1.setId((r_id*10+(c_id+col)) + "");
                     chessGrid.add(iv1, col, row);
                     iv1.setOnMouseClicked(new EventHandler<MouseEvent>() {
                         @Override
                         public void handle(MouseEvent event) {
-                            if (evenClick) {
-                                System.out.println("Clicked at "+iv1.getId());
-                                evenClick = false;
-                            } else {
-                                System.out.println("Clicked at "+iv1.getId());
-                                evenClick = true;
-                            }
+                            gameMove(iv1.getId());
                         }
                     });
 
@@ -214,6 +201,44 @@ public class ChessTab extends Tab {
 
         }
 
+    }
+
+    private void gameMove(String id){
+        if (evenClick) {
+            srcClick = id;
+
+            System.out.println("===========================================");
+            System.out.println("Click:   "+evenClick);
+            System.out.println("src:     "+srcClick);
+            System.out.println("dest:    "+destClick);
+            System.out.println("na poli: "+chessGame.getBoard().getField(parseColFromID(srcClick), parseRowFromID(srcClick)).get().getClass().getName());
+            System.out.println("-------------------------------------------");
+            evenClick = false;
+        } else {
+            destClick = id;
+            if (srcClick != destClick){
+                System.out.println("Click:   "+evenClick);
+                System.out.println("src:     "+srcClick);
+                System.out.println("dest:    "+destClick);
+                System.out.println("===========================================");
+                Boolean a = chessGame.move(chessGame.getBoard().getField(parseColFromID(srcClick), parseRowFromID(srcClick)).get(), chessGame.getBoard().getField(parseColFromID(destClick),parseRowFromID(destClick)));
+                System.out.println(a);
+                displayGame();
+            }
+
+            srcClick = "";
+            destClick = "";
+            evenClick = true;
+        }
+    }
+
+
+            private int parseColFromID(String id){
+        return Integer.parseInt(id)/10;
+    }
+
+    private int parseRowFromID(String id){
+        return Integer.parseInt(id)%10;
     }
 
 }

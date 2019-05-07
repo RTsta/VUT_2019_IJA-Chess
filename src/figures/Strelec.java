@@ -61,10 +61,12 @@ public class Strelec extends AbstractFigure{
         }
 
         /*odstranění cizího hráče*/
-        if(field.get() != null && field.get().isWhite() != this.isWhite){
-            field.remove();
-        }else {return false;}
-        //TODO myslím si, že nekontroluji jestli tam není vlastní hráč
+        if (field.get() != null){
+            if (field.get().isWhite() != this.isWhite){
+                field.remove();
+            } else {return false;}
+        }
+
         this.reposition(field,board);
         return true;
 

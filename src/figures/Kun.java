@@ -48,12 +48,11 @@ public class Kun extends AbstractFigure {
         if ( ( Math.abs(startRow-endRow) == 2 ) && ( Math.abs(startCol-endCol) == 1 ) ||
              ( Math.abs(startCol-endCol) == 2 ) && ( Math.abs(startRow-endRow) == 1 ) ){
 
-            /*odstranění cizího hráče, pokud to není moje figurka*/
-            if(field.get() != null && field.get().isWhite() != this.isWhite){
-                field.remove();
-            }
-            else {
-                return false;
+            /*odstranění cizího hráče*/
+            if (field.get() != null){
+                if (field.get().isWhite() != this.isWhite){
+                    field.remove();
+                } else {return false;}
             }
 
             this.reposition(field,board);

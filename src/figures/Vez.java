@@ -64,9 +64,11 @@ public class Vez extends AbstractFigure {
             }
         }
         /*odstranění cizího hráče*/
-        if(field.get() != null && field.get().isWhite() != this.isWhite){
-            field.remove();
-        } else {return false;}
+        if (field.get() != null){
+            if (field.get().isWhite() != this.isWhite){
+                field.remove();
+            } else {return false;}
+        }
 
         this.reposition(field,board);
         return true;

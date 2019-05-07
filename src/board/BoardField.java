@@ -44,11 +44,11 @@ public class BoardField implements Field {
     }
 
     public int getCol(){
-        return this.row;
+        return this.col;
     }
 
     public int getRow(){
-        return this.col;
+        return this.row;
     }
 
     @Override

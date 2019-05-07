@@ -23,11 +23,6 @@ public class ChessGame implements Game {
         this.board = board;
         this.stack = new Stack<Move>();
 
-        for(int i = 1; i <= board.getSize(); i++){
-            board.getField(i, 2).put(new Pesak(i, 2, true));
-            board.getField(i, board.getSize()-1).put(new Pesak(i, board.getSize()-1, false));
-        }
-
         /* put bílých figurek*/
         board.getField(1,1).put(new Vez(1,1,true));
         board.getField(2,1).put(new Kun(2,1,true));
