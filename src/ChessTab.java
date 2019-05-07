@@ -68,6 +68,12 @@ public class ChessTab extends Tab {
                     public void handle(MouseEvent event) {
                         displayGame();
 
+                        ImageView iv1 = new ImageView(new Image("/GUI/figureImages/icons8-bishop-50.png"));
+                        iv1.setStyle("-fx-background-color: white;");
+                        iv1.setFitHeight(15);
+                        iv1.setFitWidth(15);
+                        chessGrid.add(iv1,7, 7);
+
                     }
                 });
 
@@ -92,48 +98,59 @@ public class ChessTab extends Tab {
                 return child;
             }
         }
+        //Rychlejší alternativa
+        //chessGrid.lookup((row)*10+(col)+"");
+
         return null;
     }
 
     public void displayGame() {
 
+        Board b = chessGame.getBoard();
+
         for (int row = 0; row < SIZE; row++) {
             int c_id = SIZE-row;
             int r_id = 1;
-            for (int col = 0; col < SIZE; col ++) {
-                String squareID = (r_id)*10+(col+c_id)+"";
-                Board b = chessGame.getBoard();
-                Field f = b.getField((col+c_id), r_id);
-                Node tile = getChessTileAtCords(row, col);
 
-                switch (f.get().getClass().getName()){
-                    case "Kral":
+            for (int col = 0; col < SIZE; col ++) {
+                System.out.println("Figurka: row-"+(c_id+col)+",col-"+r_id+" | Policko: "+ (col*10+row));
+
+                //String squareID = (r_id)*10+(col+c_id)+"";
+                Field f = b.getField(r_id, (col+c_id));
+                if (f.get() == null){
+                    r_id++;
+                    c_id--;
+                    continue;
+                }
+
+                switch (f.get().getClass().getName().toLowerCase()){
+                    case "figures.kral":
                         if (f.get().isWhite()){
-                            ImageView iv1 = new ImageView(new Image("/GUI/figureImages/icons8-bishop-50.png");
+                            ImageView iv1 = new ImageView(new Image("/GUI/figureImages/icons8-bishop-50.png"));
+                            chessGrid.add(iv1,col, row);
                             //@todo přidat obrázek do StackPane
                             //bila figurka
                         } else {
                             //cerna figurka
                         }
                         break;
-                    case "Dama":
+                    case "figures.dama":
                         break;
-                    case "Kun":
+                    case "fiures.kun":
                         break;
-                    case "Strelec":
+                    case "figures.strelec":
                         break;
-                    case "Vez":
+                    case "figures.vez":
                         break;
-                    case "Pesak":
+                    case "figures.pesak":
                         break;
                     default:
                         break;
-
                 }
-
                 r_id++;
+                c_id--;
             }
-            c_id--;
+
         }
 
     }
