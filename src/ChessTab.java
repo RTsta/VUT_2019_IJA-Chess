@@ -12,8 +12,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
-import java.net.URL;
-
 public class ChessTab extends Tab {
 
     ChessGame chessGame;
@@ -121,9 +119,9 @@ public class ChessTab extends Tab {
 
                 //String squareID = (r_id)*10+(col+c_id)+"";
                 Field f = b.getField(r_id, (col+c_id));
+                ImageView iv1;
                 if (f.get() == null){
-
-                    StackPane iv1 = new StackPane();
+                    iv1 = new ImageView(new Image("/GUI/figureImages/empty.png"));
                     String color ;
                     if ((row + col) % 2 == 0) {
                         color = COLORW;
@@ -131,87 +129,67 @@ public class ChessTab extends Tab {
                         color = COLORB;
                     }
                     iv1.setStyle("-fx-background-color: "+color+";");
+                } else {
+                    switch (f.get().getClass().getName().toLowerCase()) {
+                        case "figures.kral":
+                            if (f.get().isWhite()) {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/kral_w.png"));
+                                //bila figurka
+                            } else {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/kral_b.png"));
+                                //cerna figurka
+                            }
+                            break;
+                        case "figures.dama":
+                            if (f.get().isWhite()) {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/dama_w.png"));
 
-                    iv1.setId((col*10+row) + "");
-                    iv1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                                              @Override
-                                              public void handle(MouseEvent event) {
-                                                  if (evenClick) {
-                                                      System.out.println("Clicked at "+iv1.getId());
-                                                      evenClick = false;
-                                                  } else {
-                                                      System.out.println("Clicked at "+iv1.getId());
-                                                      evenClick = true;
-                                                  }
-                                              }
-                                          });
-
-                    chessGrid.add(iv1,col, row);
-
-                    r_id++;
-                    c_id--;
-                    continue;
-                }
-                ImageView iv1;
-                switch (f.get().getClass().getName().toLowerCase()){
-                    case "figures.kral":
-                        if (f.get().isWhite()){
-                            iv1 = new ImageView(new Image("/GUI/figureImages/kral_w.png"));
-                            //bila figurka
-                        } else {
-                            iv1 = new ImageView(new Image("/GUI/figureImages/kral_b.png"));
-                            //cerna figurka
-                        }
-                        break;
-                    case "figures.dama":
-                        if (f.get().isWhite()){
-                            iv1 = new ImageView(new Image("/GUI/figureImages/dama_w.png"));
-
-                            //bila figurka
-                        } else {
-                            iv1 = new ImageView(new Image("/GUI/figureImages/dama_b.png"));
-                            //cerna figurka
-                        }
-                        break;
-                    case "figures.kun":
-                        if (f.get().isWhite()){
-                            iv1 = new ImageView(new Image("/GUI/figureImages/kun_w.png"));
-                            //bila figurka
-                        } else {
-                            iv1 = new ImageView(new Image("/GUI/figureImages/kun_b.png"));
-                            //cerna figurka
-                        }
-                        break;
-                    case "figures.strelec":
-                        if (f.get().isWhite()){
-                            iv1 = new ImageView(new Image("/GUI/figureImages/strelec_w.png"));
-                            //bila figurka
-                        } else {
-                            iv1 = new ImageView(new Image("/GUI/figureImages/strelec_b.png"));
-                            //cerna figurka
-                        }
-                        break;
-                    case "figures.vez":
-                        if (f.get().isWhite()){
-                            iv1 = new ImageView(new Image("/GUI/figureImages/vez_w.png"));
-                            //bila figurka
-                        } else {
-                            iv1 = new ImageView(new Image("/GUI/figureImages/vez_b.png"));
-                            //cerna figurka
-                        }
-                        break;
-                    case "figures.pesak":
-                        if (f.get().isWhite()){
-                            iv1 = new ImageView(new Image("/GUI/figureImages/pesak_w.png"));
-                            //bila figurka
-                        } else {
-                            iv1 = new ImageView(new Image("/GUI/figureImages/pesak_b.png"));
-                            //cerna figurka
-                        }
-                        break;
-                    default:
-                        iv1 = null;
-                        break;
+                                //bila figurka
+                            } else {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/dama_b.png"));
+                                //cerna figurka
+                            }
+                            break;
+                        case "figures.kun":
+                            if (f.get().isWhite()) {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/kun_w.png"));
+                                //bila figurka
+                            } else {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/kun_b.png"));
+                                //cerna figurka
+                            }
+                            break;
+                        case "figures.strelec":
+                            if (f.get().isWhite()) {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/strelec_w.png"));
+                                //bila figurka
+                            } else {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/strelec_b.png"));
+                                //cerna figurka
+                            }
+                            break;
+                        case "figures.vez":
+                            if (f.get().isWhite()) {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/vez_w.png"));
+                                //bila figurka
+                            } else {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/vez_b.png"));
+                                //cerna figurka
+                            }
+                            break;
+                        case "figures.pesak":
+                            if (f.get().isWhite()) {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/pesak_w.png"));
+                                //bila figurka
+                            } else {
+                                iv1 = new ImageView(new Image("/GUI/figureImages/pesak_b.png"));
+                                //cerna figurka
+                            }
+                            break;
+                        default:
+                            iv1 = null;
+                            break;
+                    }
                 }
                 if (iv1 != null) {
                     iv1.setId((col * 10 + row) + "");
