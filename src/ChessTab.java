@@ -19,6 +19,9 @@ public class ChessTab extends Tab {
     ChessGame chessGame;
     GridPane chessGrid;
     int SIZE = 8;
+    String COLORB = "#7D7D7D";
+    String COLORW = "white";
+    Boolean evenClick;
 
     public ChessTab(String name){
         super();
@@ -28,6 +31,8 @@ public class ChessTab extends Tab {
         this.chessGrid = createNewChessGame();
         super.setContent(chessGrid);
         super.setText(name);
+        displayGame();
+        evenClick = true;
     }
 
     GridPane createNewChessGame(){
@@ -54,9 +59,9 @@ public class ChessTab extends Tab {
                 String color ;
 
                 if ((row + col) % 2 == 0) {
-                    color = "white";
+                    color = COLORW;
                 } else {
-                    color = "black";
+                    color = COLORB;
                 }
 
 
@@ -66,14 +71,13 @@ public class ChessTab extends Tab {
                 square.setOnMouseClicked(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        displayGame();
-
-                        ImageView iv1 = new ImageView(new Image("/GUI/figureImages/icons8-bishop-50.png"));
-                        iv1.setStyle("-fx-background-color: white;");
-                        iv1.setFitHeight(15);
-                        iv1.setFitWidth(15);
-                        chessGrid.add(iv1,7, 7);
-
+                        if (evenClick) {
+                            System.out.println("Clicked at "+square.getId());
+                            evenClick = false;
+                        } else {
+                            System.out.println("Clicked at "+square.getId());
+                            evenClick = true;
+                        }
                     }
                 });
 
@@ -118,34 +122,113 @@ public class ChessTab extends Tab {
                 //String squareID = (r_id)*10+(col+c_id)+"";
                 Field f = b.getField(r_id, (col+c_id));
                 if (f.get() == null){
+
+                    StackPane iv1 = new StackPane();
+                    String color ;
+                    if ((row + col) % 2 == 0) {
+                        color = COLORW;
+                    } else {
+                        color = COLORB;
+                    }
+                    iv1.setStyle("-fx-background-color: "+color+";");
+
+                    iv1.setId((col*10+row) + "");
+                    iv1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                                              @Override
+                                              public void handle(MouseEvent event) {
+                                                  if (evenClick) {
+                                                      System.out.println("Clicked at "+iv1.getId());
+                                                      evenClick = false;
+                                                  } else {
+                                                      System.out.println("Clicked at "+iv1.getId());
+                                                      evenClick = true;
+                                                  }
+                                              }
+                                          });
+
+                    chessGrid.add(iv1,col, row);
+
                     r_id++;
                     c_id--;
                     continue;
                 }
-
+                ImageView iv1;
                 switch (f.get().getClass().getName().toLowerCase()){
                     case "figures.kral":
                         if (f.get().isWhite()){
-                            ImageView iv1 = new ImageView(new Image("/GUI/figureImages/icons8-bishop-50.png"));
-                            chessGrid.add(iv1,col, row);
-                            //@todo přidat obrázek do StackPane
+                            iv1 = new ImageView(new Image("/GUI/figureImages/kral_w.png"));
                             //bila figurka
                         } else {
+                            iv1 = new ImageView(new Image("/GUI/figureImages/kral_b.png"));
                             //cerna figurka
                         }
                         break;
                     case "figures.dama":
+                        if (f.get().isWhite()){
+                            iv1 = new ImageView(new Image("/GUI/figureImages/dama_w.png"));
+
+                            //bila figurka
+                        } else {
+                            iv1 = new ImageView(new Image("/GUI/figureImages/dama_b.png"));
+                            //cerna figurka
+                        }
                         break;
-                    case "fiures.kun":
+                    case "figures.kun":
+                        if (f.get().isWhite()){
+                            iv1 = new ImageView(new Image("/GUI/figureImages/kun_w.png"));
+                            //bila figurka
+                        } else {
+                            iv1 = new ImageView(new Image("/GUI/figureImages/kun_b.png"));
+                            //cerna figurka
+                        }
                         break;
                     case "figures.strelec":
+                        if (f.get().isWhite()){
+                            iv1 = new ImageView(new Image("/GUI/figureImages/strelec_w.png"));
+                            //bila figurka
+                        } else {
+                            iv1 = new ImageView(new Image("/GUI/figureImages/strelec_b.png"));
+                            //cerna figurka
+                        }
                         break;
                     case "figures.vez":
+                        if (f.get().isWhite()){
+                            iv1 = new ImageView(new Image("/GUI/figureImages/vez_w.png"));
+                            //bila figurka
+                        } else {
+                            iv1 = new ImageView(new Image("/GUI/figureImages/vez_b.png"));
+                            //cerna figurka
+                        }
                         break;
                     case "figures.pesak":
+                        if (f.get().isWhite()){
+                            iv1 = new ImageView(new Image("/GUI/figureImages/pesak_w.png"));
+                            //bila figurka
+                        } else {
+                            iv1 = new ImageView(new Image("/GUI/figureImages/pesak_b.png"));
+                            //cerna figurka
+                        }
                         break;
                     default:
+                        iv1 = null;
                         break;
+                }
+                if (iv1 != null) {
+                    iv1.setId((col * 10 + row) + "");
+                    chessGrid.add(iv1, col, row);
+                    iv1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (evenClick) {
+                                System.out.println("Clicked at "+iv1.getId());
+                                evenClick = false;
+                            } else {
+                                System.out.println("Clicked at "+iv1.getId());
+                                evenClick = true;
+                            }
+                        }
+                    });
+
                 }
                 r_id++;
                 c_id--;
