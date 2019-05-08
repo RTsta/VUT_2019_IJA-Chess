@@ -15,14 +15,16 @@ import javafx.scene.layout.*;
 
 public class ChessTab extends Tab {
 
-    ChessGame chessGame;
-    GridPane chessGrid;
-    int SIZE = 8;
-    String COLORB = "#7D7D7D";
-    String COLORW = "white";
-    Boolean evenClick;
-    String srcClick;
-    String destClick;
+    private ChessGame chessGame;
+    private GridPane chessGrid;
+    private int SIZE = 8;
+    private String COLORB = "#7D7D7D";
+    private String COLORW = "white";
+    private Boolean evenClick;
+    private String srcClick;
+    private String destClick;
+
+    private Boolean whitesTurn;
 
 
     public ChessTab(String name){
@@ -38,6 +40,8 @@ public class ChessTab extends Tab {
 
         srcClick = "";
         destClick = "";
+
+        whitesTurn = true;
     }
 
     GridPane createNewChessBoard(){
@@ -198,15 +202,10 @@ public class ChessTab extends Tab {
 
     private void gameMove(String id){
         if (evenClick) {
-            srcClick = id;
-
-            System.out.println("===========================================");
-            System.out.println("Click:   "+evenClick);
-            System.out.println("src:     "+srcClick);
-            System.out.println("dest:    "+destClick);
-            System.out.println("na poli: "+chessGame.getBoard().getField(parseColFromID(srcClick), parseRowFromID(srcClick)).get().getClass().getName());
-            System.out.println("-------------------------------------------");
-            evenClick = false;
+            if (whitesTurn == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
+                srcClick = id;
+                evenClick = false;
+            }
         } else {
             destClick = id;
             if (srcClick != destClick){
@@ -214,9 +213,12 @@ public class ChessTab extends Tab {
                 System.out.println("src:     "+srcClick);
                 System.out.println("dest:    "+destClick);
                 System.out.println("===========================================");
+
                 Boolean a = chessGame.move(chessGame.getBoard().getField(parseColFromID(srcClick), parseRowFromID(srcClick)).get(), chessGame.getBoard().getField(parseColFromID(destClick),parseRowFromID(destClick)));
-                System.out.println(a);
-                displayGame();
+                if (a) {
+                    whitesTurn = !whitesTurn;
+                    displayGame();
+                }
             }
 
             srcClick = "";
