@@ -1,15 +1,18 @@
 import board.Board;
 import board.Field;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
-import javafx.scene.control.Control;
-import javafx.scene.control.Tab;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
@@ -17,6 +20,10 @@ public class ChessTab extends Tab {
 
     private ChessGame chessGame;
     private GridPane chessGrid;
+    private ListView sideListView;
+
+
+
     private int SIZE = 8;
     private String COLORB = "#7D7D7D";
     private String COLORW = "white";
@@ -32,8 +39,41 @@ public class ChessTab extends Tab {
 
         Board b = new Board(SIZE);
         this.chessGame = new ChessGame(b);
-        this.chessGrid = createNewChessBoard();
-        super.setContent(chessGrid);
+        this.chessGrid = createNewChessGrid();
+
+            sideListView = new ListView();
+            sideListView.setCellFactory(TextFieldListCell.forListView());
+            sideListView.setEditable(false);
+
+            TextArea sideImportTextArea = new TextArea();
+
+            Button btn1 = new Button();
+            btn1.setText("Importovat tahy");
+            Button btn2 = new Button();
+            btn2.setText("Undo");
+
+            HBox bottomNavigationButtons = new HBox(btn1, btn2);
+                VBox sideListBox = new VBox(sideListView, sideImportTextArea,bottomNavigationButtons);
+            btn1.setOnAction((ActionEvent event) -> {
+                sideListBox.getChildren().remove(sideImportTextArea);
+            });
+
+
+        // Anchor the controls
+        AnchorPane anchor = new AnchorPane();
+        anchor.getChildren().addAll(chessGrid, sideListBox);
+
+        AnchorPane.setLeftAnchor(chessGrid,1.);
+        AnchorPane.setTopAnchor(chessGrid,1.);
+        AnchorPane.setBottomAnchor(chessGrid,1.);
+
+        AnchorPane.setBottomAnchor(sideListBox,1.);
+        AnchorPane.setRightAnchor(sideListBox,1.);
+        AnchorPane.setTopAnchor(sideListBox,1.);
+        AnchorPane.setLeftAnchor(sideListBox, 400.);
+
+        super.setContent(anchor);
+        //super.setContent(chessGrid);
         super.setText(name);
         displayGame();
         evenClick = true;
@@ -44,7 +84,7 @@ public class ChessTab extends Tab {
         whitesTurn = true;
     }
 
-    GridPane createNewChessBoard(){
+   private GridPane createNewChessGrid(){
 
             /*
         |VC|KC|SC|KC|DC|SC|KC|VC|  *  |18|28|38|48|58|68|78|88|
@@ -234,15 +274,6 @@ public class ChessTab extends Tab {
 
     private int parseRowFromID(String id){
         return Integer.parseInt(id)%10;
-    }
-
-    private Node getNodeFromGridPane(GridPane gridPane, int col, int row) {
-        for (Node node : gridPane.getChildren()) {
-            if (GridPane.getColumnIndex(node) == col && GridPane.getRowIndex(node) == row) {
-                return node;
-            }
-        }
-        return null;
     }
 
 }

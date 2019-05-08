@@ -4,6 +4,8 @@ import board.Board;
 import board.BoardField;
 import board.Field;
 
+//TODO pokud pěšec dojde na konec šachovnice, může si vybrat v co se změní
+
 public class Pesak extends AbstractFigure{
 
     private Boolean beenMoved;
@@ -12,7 +14,6 @@ public class Pesak extends AbstractFigure{
 
         super(col, row, isWhite);
         beenMoved = false;
-
     }
 
     @Override

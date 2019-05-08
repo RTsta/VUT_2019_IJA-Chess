@@ -1,6 +1,7 @@
 import board.Board;
 import board.BoardField;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -19,22 +20,36 @@ import javafx.stage.Stage;
 public class MainWindow extends Application {
     final int SIZE = 8;
 
-
     public static void main(String[] args) {
         launch(args);
     }
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setTitle("Creating Tab");
+        primaryStage.setTitle("Terrible chess");
 
-        // create a tabpane
+        AnchorPane mainPane = new AnchorPane();
         TabPane tabPane = new TabPane();
 
-        tabPane.getTabs().add(new ChessTab("Chess 1"));
+        // create a TabPane
+        tabPane.getTabs().add(new ChessTab("Chess "));
 
+        Button addBtn = new Button();
+        addBtn.setText("+");
+        addBtn.setOnAction((ActionEvent event) -> {
+            tabPane.getTabs().add(new ChessTab("Chess"));
+        });
+        mainPane.getChildren().addAll(tabPane, addBtn);
 
-        primaryStage.setScene(new Scene(tabPane, 400, 400));
+        AnchorPane.setLeftAnchor(tabPane,1.);
+        AnchorPane.setTopAnchor(tabPane,1.);
+        AnchorPane.setBottomAnchor(tabPane,1.);
+        AnchorPane.setRightAnchor(tabPane,1.);
+
+        AnchorPane.setRightAnchor(addBtn,1.);
+        AnchorPane.setTopAnchor(addBtn,1.);
+
+        primaryStage.setScene(new Scene(mainPane, 600, 400));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
