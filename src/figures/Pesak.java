@@ -13,6 +13,7 @@ public class Pesak extends AbstractFigure{
     public Pesak(int col, int row, boolean isWhite){
 
         super(col, row, isWhite);
+        shortcut = "";
         beenMoved = false;
     }
 

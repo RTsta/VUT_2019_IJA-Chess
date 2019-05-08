@@ -7,6 +7,7 @@ import java.util.Stack;
 public class ChessGame implements Game {
 
     private Board board;
+    private int numberOfAliveFigures;
     private Stack<Move> stack;
 
     /*
@@ -50,6 +51,7 @@ public class ChessGame implements Game {
         for(int i = 1; i <= board.getSize(); i++) {
             board.getField(i, 7).put(new Pesak(i, 7, false));
         }
+        numberOfAliveFigures = 32;
     }
 
     public Board getBoard(){

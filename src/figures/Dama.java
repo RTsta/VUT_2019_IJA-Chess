@@ -7,6 +7,7 @@ import board.Field;
 public class Dama extends AbstractFigure {
     public Dama(int col, int row, boolean isWhite){
         super(col, row, isWhite);
+        shortcut = "D";
     }
 
     @Override

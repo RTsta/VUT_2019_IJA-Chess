@@ -7,6 +7,7 @@ public abstract class AbstractFigure implements Figure{
     protected boolean isWhite;
     protected int col;
     protected int row;
+    protected String shortcut;
 
     public AbstractFigure(int col, int row, boolean isWhite) {
         this.col = col;
@@ -25,6 +26,10 @@ public abstract class AbstractFigure implements Figure{
 
     public boolean isWhite(){
         return this.isWhite;
+    }
+
+    public String getShortcut(){
+        return this.shortcut;
     }
 
     public void setColRow(int col, int row){

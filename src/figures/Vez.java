@@ -17,6 +17,7 @@ import board.Field;
 public class Vez extends AbstractFigure {
     public Vez(int col, int row, boolean isWhite){
         super(col, row, isWhite);
+        shortcut = "V";
     }
 
 

@@ -16,12 +16,13 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 
+import java.util.Dictionary;
+
 public class ChessTab extends Tab {
 
     private ChessGame chessGame;
     private GridPane chessGrid;
     private ListView sideListView;
-
 
 
     private int SIZE = 8;
@@ -32,6 +33,7 @@ public class ChessTab extends Tab {
     private String destClick;
 
     private Boolean whitesTurn;
+    private int lapsCounter;
 
 
     public ChessTab(String name){
@@ -82,6 +84,7 @@ public class ChessTab extends Tab {
         destClick = "";
 
         whitesTurn = true;
+        lapsCounter = 1;
     }
 
    private GridPane createNewChessGrid(){
@@ -242,25 +245,27 @@ public class ChessTab extends Tab {
 
     private void gameMove(String id){
         if (evenClick) {
-            if (whitesTurn == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
+            if (chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get()!= null && whitesTurn == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
                 srcClick = id;
                 evenClick = false;
             }
         } else {
             destClick = id;
             if (srcClick != destClick){
-                System.out.println("Click:   "+evenClick);
-                System.out.println("src:     "+srcClick);
-                System.out.println("dest:    "+destClick);
-                System.out.println("===========================================");
-
-                Boolean a = chessGame.move(chessGame.getBoard().getField(parseColFromID(srcClick), parseRowFromID(srcClick)).get(), chessGame.getBoard().getField(parseColFromID(destClick),parseRowFromID(destClick)));
+                int s_col =parseColFromID(srcClick);
+                int s_row = parseRowFromID(srcClick);
+                int d_col = parseColFromID(destClick);
+                int d_row = parseRowFromID(destClick);
+                //todo přidavat do textfieldu až když potáhne i černý hráš a mezitím si někde ukládat co za tah udělal bílý
+                Boolean a = chessGame.move(chessGame.getBoard().getField(s_col, s_row).get(), chessGame.getBoard().getField(d_col,d_row));
                 if (a) {
+                    System.out.println();
+                    sideListView.getItems().add(lapsCounter + ". "+chessGame.getBoard().getField(d_col,d_row).get().getShortcut()+((char) ((s_col)+'a'-1)) + s_row + ((char) (d_col+'a'-1)) +d_row);
                     whitesTurn = !whitesTurn;
                     displayGame();
+                    lapsCounter++;
                 }
             }
-
             srcClick = "";
             destClick = "";
             evenClick = true;

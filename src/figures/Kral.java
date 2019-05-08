@@ -18,6 +18,7 @@ public class Kral extends AbstractFigure {
 
     public Kral(int col, int row, boolean isWhite){
         super(col, row, isWhite);
+        shortcut = "K";
     }
 
     @Override

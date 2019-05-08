@@ -11,6 +11,7 @@ public interface Figure{
     boolean move(Field field, Board board);
     int getCol();
     int getRow();
+    String getShortcut();
     boolean isWhite();
     void setColRow(int col, int row);
 }

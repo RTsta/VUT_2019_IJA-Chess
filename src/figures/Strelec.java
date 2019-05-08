@@ -18,6 +18,7 @@ import board.Field;
 public class Strelec extends AbstractFigure{
     public Strelec(int col, int row, boolean isWhite){
         super(col, row, isWhite);
+        shortcut = "S";
     }
 
     @Override

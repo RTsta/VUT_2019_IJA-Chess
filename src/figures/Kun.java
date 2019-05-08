@@ -17,6 +17,7 @@ public class Kun extends AbstractFigure {
 
     public Kun(int col, int row, boolean isWhite){
         super(col, row, isWhite);
+        shortcut = "J";
     }
 
     @Override
