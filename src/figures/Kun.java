@@ -31,7 +31,7 @@ public class Kun extends AbstractFigure {
     * */
     //TODO otestovat
     @Override
-    public boolean move(Field field, Board board) {
+    public boolean move(Field field, Board board, boolean realMove) {
 
         /* pohyb na místo, na kterém se právě nachází */
         if(field.getCol() == this.col && field.getRow() == this.row) {
@@ -49,21 +49,22 @@ public class Kun extends AbstractFigure {
         if ( ( Math.abs(startRow-endRow) == 2 ) && ( Math.abs(startCol-endCol) == 1 ) ||
              ( Math.abs(startCol-endCol) == 2 ) && ( Math.abs(startRow-endRow) == 1 ) ){
 
-            /*odstranění cizího hráče*/
-            if (field.get() != null){
-                if (field.get().isWhite() != this.isWhite){
-                    field.remove();
-                } else {return false;}
-            }
+            if (realMove) {
+                /*odstranění cizího hráče*/
+                if (field.get() != null) {
+                    if (field.get().isWhite() != this.isWhite) {
+                        field.remove();
+                    } else {
+                        return false;
+                    }
+                }
 
-            this.reposition(field,board);
+                this.reposition(field, board);
+            }
             return true;
         }
         else{
             return false;
         }
-
-
-
     }
 }

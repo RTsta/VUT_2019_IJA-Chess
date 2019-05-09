@@ -42,8 +42,8 @@ public class ChessGame implements Game {
         board.getField(1,8).put(new Vez(1,8,false));
         board.getField(2,8).put(new Kun(2,8,false));
         board.getField(3,8).put(new Strelec(3,8,false));
-        board.getField(4,8).put(new Kral(5,8,false));
-        board.getField(5,8).put(new Dama(4,8,false));
+        board.getField(4,8).put(new Dama(4,8,false));
+        board.getField(5,8).put(new Kral(5,8,false));
         board.getField(6,8).put(new Strelec(6,8,false));
         board.getField(7,8).put(new Kun(7,8,false));
         board.getField(8,8).put(new Vez(8,8, false));
@@ -62,7 +62,7 @@ public class ChessGame implements Game {
     public boolean move(Figure figure, Field field){
         Field prevf = this.board.getField(figure.getCol(), figure.getRow());
         Figure f = field.get();
-        boolean b = figure.move(field, this.board);
+        boolean b = figure.move(field, this.board, true);
         if(b){
             this.stack.push(new Move(prevf, figure, f, field));
         }

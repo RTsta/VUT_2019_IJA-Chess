@@ -27,7 +27,7 @@ public class Vez extends AbstractFigure {
     }
 
     @Override
-    public boolean move(Field field, Board board){
+    public boolean move(Field field, Board board, boolean realMove){
 
         /*test jestli tah není do úhlopříčky vždy musí alespoň jedna souřadnice být stejná*/
         if( ((BoardField)field).getCol() != this.col && ((BoardField)field).getRow() != this.row){
@@ -64,14 +64,19 @@ public class Vez extends AbstractFigure {
                 return false;
             }
         }
-        /*odstranění cizího hráče*/
-        if (field.get() != null){
-            if (field.get().isWhite() != this.isWhite){
-                field.remove();
-            } else {return false;}
-        }
 
-        this.reposition(field,board);
+        if (realMove) {
+            /*odstranění cizího hráče*/
+            if (field.get() != null) {
+                if (field.get().isWhite() != this.isWhite) {
+                    field.remove();
+                } else {
+                    return false;
+                }
+            }
+
+            this.reposition(field, board);
+        }
         return true;
     }
 

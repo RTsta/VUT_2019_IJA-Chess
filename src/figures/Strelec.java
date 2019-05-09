@@ -28,8 +28,7 @@ public class Strelec extends AbstractFigure{
 
     //TODO otestovat
     @Override
-    public boolean move(Field field, Board board) {
-
+    public boolean move(Field field, Board board, boolean realMove) {
         /*kontrola, že pohyb není po přímce*/
         if( ((BoardField)field).getCol() == this.col || ((BoardField)field).getRow() == this.row){
             return false;
@@ -61,14 +60,18 @@ public class Strelec extends AbstractFigure{
             }
         }
 
-        /*odstranění cizího hráče*/
-        if (field.get() != null){
-            if (field.get().isWhite() != this.isWhite){
-                field.remove();
-            } else {return false;}
-        }
+        if (realMove) {
+            /*odstranění cizího hráče*/
+            if (field.get() != null) {
+                if (field.get().isWhite() != this.isWhite) {
+                    field.remove();
+                } else {
+                    return false;
+                }
+            }
 
-        this.reposition(field,board);
+            this.reposition(field, board);
+        }
         return true;
 
 

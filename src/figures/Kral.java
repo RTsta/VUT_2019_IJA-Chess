@@ -28,7 +28,7 @@ public class Kral extends AbstractFigure {
 
     //TODO otestovat
     @Override
-    public boolean move(Field field, Board board) {
+    public boolean move(Field field, Board board, boolean realMove) {
         /* pohyb na místo, na kterém se právě nachází */
         if(field.getCol() == this.col && field.getRow() == this.row)
             return false;
@@ -45,14 +45,18 @@ public class Kral extends AbstractFigure {
             return false;
         }
 
-        /*odstranění cizího hráče*/
-        if (field.get() != null){
-            if (field.get().isWhite() != this.isWhite){
-                field.remove();
-            } else {return false;}
-        }
+        if (realMove) {
+            /*odstranění cizího hráče*/
+            if (field.get() != null) {
+                if (field.get().isWhite() != this.isWhite) {
+                    field.remove();
+                } else {
+                    return false;
+                }
+            }
 
-        this.reposition(field,board);
+            this.reposition(field, board);
+        }
         return true;
 
 

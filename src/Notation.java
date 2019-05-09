@@ -175,11 +175,17 @@ public class Notation {
                     Figure fig = board.getField(j,i).get();
                     if (fig == null) { continue; }
                     if (fig.getClass().getName().toLowerCase().compareTo("figures."+figureToString(figure)) == 0 && fig.isWhite() == isWhite) {
-                        //System.out.println("jo");
+                        System.out.println(fig.move(board.getField(col, row), board, false));
+                        if (fig.move(board.getField(col, row), board, false)) {
+                            if (isWhite) {
+                                this.srcColWhite = j;
+                                this.srcRowWhite = i;
+                            } else {
+                                this.srcColBlack = j;
+                                this.srcRowBlack = i;
+                            }
+                        }
                     }
-
-
-                    //TODO najit figurku
                 }
             }
         } else { return false; }
@@ -191,6 +197,15 @@ public class Notation {
                     this.changeBlack = change;
                 }
             } else {
+                return false;
+            }
+        }
+        if (isWhite) {
+            if (this.srcColWhite == 0 || this.srcRowWhite == 0 || this.desColWhite == 0 || this.desRowWhite == 0) {
+                return false;
+            }
+        } else {
+            if (this.srcColBlack == 0 || this.srcRowBlack == 0 || this.desColBlack == 0 || this.desRowBlack == 0) {
                 return false;
             }
         }

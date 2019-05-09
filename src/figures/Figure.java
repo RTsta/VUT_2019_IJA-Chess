@@ -8,7 +8,7 @@ import board.Field;
  */
 public interface Figure{
     String getState();
-    boolean move(Field field, Board board);
+    boolean move(Field field, Board board, boolean realMove);
     int getCol();
     int getRow();
     String getShortcut();
