@@ -9,12 +9,16 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.Stage;
+
+import java.util.concurrent.TimeUnit;
 
 public class ChessTab extends Tab {
 
@@ -26,7 +30,8 @@ public class ChessTab extends Tab {
     private HBox topNavigationButtons;
     private Button btn1;
     private Button rldBtn;
-    private Button playPauseBtn;
+    private Button playBtn;
+    private Button pauseBtn;
 
     private Label checkLabel;
     private Label turnsLabel;
@@ -73,8 +78,11 @@ public class ChessTab extends Tab {
                     this.rldBtn = new Button();
                     rldBtn.setText("RLD");
 
-                    this.playPauseBtn = new Button();
-                    playPauseBtn.setText(">||");
+                    this.playBtn = new Button();
+                    playBtn.setText(">");
+
+                    this.pauseBtn = new Button();
+                    pauseBtn.setText("||");
 
                     topNavigationButtons.getChildren().addAll(btn2, btn3, btn1);
                     topNavigationButtons.setAlignment(Pos.BOTTOM_LEFT);
@@ -84,10 +92,27 @@ public class ChessTab extends Tab {
                     btn1.setOnAction((ActionEvent event) -> {
                         leftSideListBox.getChildren().remove(sideImportTextArea);
                         topNavigationButtons.getChildren().remove(btn1);
-                        topNavigationButtons.getChildren().addAll(rldBtn, playPauseBtn);
+                        topNavigationButtons.getChildren().addAll(rldBtn, playBtn,pauseBtn);
                         gameTouched = true;
                         if (!importMoves(sideImportTextArea.getText())) {
                             // TODO error okno
+                            Stage errorWindow = new Stage();
+                            AnchorPane errorPane = new AnchorPane();
+                            Label errorMessage = new Label("Neplatný formát notace");
+                            Button okBtn = new Button("OK");
+                            okBtn.setOnAction((ActionEvent _event) -> {
+                                errorWindow.close();
+                            });
+                            errorPane.getChildren().addAll(errorMessage,okBtn);
+                            AnchorPane.setBottomAnchor(okBtn,10.);
+                            AnchorPane.setRightAnchor(okBtn,10.);
+                            AnchorPane.setTopAnchor(errorMessage, 20.);
+                            errorMessage.setAlignment(Pos.CENTER);
+                            okBtn.setAlignment(Pos.BOTTOM_RIGHT);
+                            Scene errorScene = new Scene(errorPane,300,150);
+                            errorWindow.setScene(errorScene);
+                            errorWindow.setResizable(false);
+                            errorWindow.show();
                         }
                     });
                     btn2.setOnAction((ActionEvent) -> {
@@ -104,15 +129,20 @@ public class ChessTab extends Tab {
                         this.reload();
                         displayGame();
                     });
-                    this.playPauseBtn.setOnAction((ActionEvent) ->{
-                        this.playPause = !this.playPause;
-                        while (this.playPause && chessGame.getListPos() < chessGame.getSizeOfList()) {
+                    this.playBtn.setOnAction((ActionEvent) ->{
+                        this.playPause = true;
+                        while (this.playPause && chessGame.getListPos() < chessGame.getSizeOfList()-1) {
                             chessGame.redo();
                             displayGame();
                             try {
-                                Thread.sleep(1000);
+                                TimeUnit.SECONDS.sleep(2);
                             } catch (InterruptedException e) {}
                         }
+                    });
+
+                    this.pauseBtn.setOnAction((ActionEvent) ->{
+                        this.playPause = false;
+
                     });
                                                                                     //----------------------------------
             VBox rightChessBox = new VBox();                                        //----------------------------------
@@ -341,7 +371,7 @@ public class ChessTab extends Tab {
         if (gameTouched == false){
             leftSideListBox.getChildren().remove(sideImportTextArea);
             topNavigationButtons.getChildren().remove(btn1);
-            topNavigationButtons.getChildren().addAll(rldBtn, playPauseBtn);
+            topNavigationButtons.getChildren().addAll(rldBtn, playBtn,pauseBtn);
             gameTouched = true;
         }
         if (evenClick) {
@@ -446,12 +476,11 @@ public class ChessTab extends Tab {
         }
         return true;
     }
-
     /**
      * Metoda, která přetočí hru na začátek
      */
     private void reload() {
-        while (chessGame.getListPos() > 0) {
+        while (chessGame.getListPos() >= 0) {
             chessGame.undo();
         }
     }
