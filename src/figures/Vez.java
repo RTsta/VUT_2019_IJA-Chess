@@ -37,47 +37,22 @@ public class Vez extends AbstractFigure {
         if(field.getCol() == this.col && field.getRow() == this.row)
             return false;
 
-        /*do @endCol a endRow se uloží vždy to vyšší číslo*/
-        int endCol = (((BoardField)field).getCol() > this.col ? ((BoardField)field).getCol() : this.col);
-        int endRow = (((BoardField)field).getRow() > this.row ? ((BoardField)field).getRow() : this.row);
-
-        /*do @endCol a endRow se uloží vždy to nižší číslo*/
-        int startCol = (((BoardField)field).getCol() < this.col ? ((BoardField)field).getCol() : this.col);
-        int startRow = (((BoardField)field).getRow() < this.row ? ((BoardField)field).getRow() : this.row);
-
-        /*
-        if(startCol == endCol){
-        	if((isWhite && this.row > field.getRow()) || (!isWhite && this.row < field.getRow()))
-        		return false;
-        }
-        */
-
-        /*prochýzení vždy z prava do leva a zespodu nahoru jestli něco nestojí v cestě */
-        while(!(startCol == endCol && startRow == endRow)){
-            if(startRow != endRow){
-                startRow++;
+        int startCol = this.col;
+        int startRow = this.row;
+        int endCol = field.getCol();
+        int endRow = field.getRow();
+        while (!(startCol == endCol && startRow == endRow)) {
+            if (startCol != endCol) {
+                startCol += startCol < endCol ? 1 : -1;
             }
-            else{
-                startCol++;
+            if (startRow != endRow) {
+                startRow += startRow < endRow ? 1 : -1;
             }
-            if(board.getField(startCol, startRow).get() != null){
-                return false;
-            }
+            if (board.getField(startCol, startRow) == null) { return false; }
+            if(board.getField(startCol, startRow).get() != null){ return false; }
         }
 
-        if (realMove) {
-            /*odstranění cizího hráče*/
-            if (field.get() != null) {
-                if (field.get().isWhite() != this.isWhite) {
-                    field.remove();
-                } else {
-                    return false;
-                }
-            }
-
-            this.reposition(field, board);
-        }
-        return true;
+        return finalMove(field, board, realMove);
     }
 
 }
