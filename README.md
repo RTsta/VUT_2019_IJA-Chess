@@ -1,1 +1,1 @@
-# VUT_2019_IJA-Chess
+# VUT_2019_IJA-chess

@@ -1,3 +1,5 @@
+package chess;
+
 import board.Board;
 import board.Field;
 import figures.*;
@@ -7,7 +9,7 @@ import java.util.Stack;
 public class ChessGame implements Game {
 
     private Board board;
-    private int numberOfAliveFigures;
+    //private int numberOfAliveFigures;
     private boolean check;
     private boolean mate;
     private Stack<Move> stack;
@@ -55,7 +57,7 @@ public class ChessGame implements Game {
         for(int i = 1; i <= board.getSize(); i++) {
             board.getField(i, 7).put(new Pesak(i, 7, false));
         }
-        numberOfAliveFigures = 32;
+        //numberOfAliveFigures = 32;
     }
 
     public Board getBoard(){
@@ -85,6 +87,34 @@ public class ChessGame implements Game {
             }
 
         }
+    }
+
+    /*
+    * @brief metoda testující jestli nastal šach ve hře a případně nastavuje příznak check
+    *
+    * - procházím postupně ceslou šachovnici a z každého poláčka si vyberu tmpFigure
+    * dalším cyklem postupně testuji všechny místa šachovnice, jestli na ně může figurka jít
+    * v případě úspěchu, že figurka na to místo může jít, tak testuji, jeestli náhodu na tom místě není král a pokud je, tak se nastavuje příznak check na true
+    * */
+
+    private void testCheck(){
+        for (int loopCol = 1; loopCol < this.board.getSize()+1;loopCol++){
+            for (int loopRow = 1; loopRow < this.board.getSize()+1;loopRow++){
+                Figure tmpFigure = this.board.getField(loopRow, loopRow).get();
+                        for (int moveLoopCol = 1 ; moveLoopCol < this.board.getSize()+1 ; moveLoopCol++){
+                            for (int moveLoopRow = 1; moveLoopRow < this.board.getSize()+1 ; moveLoopRow++){
+                                if (tmpFigure.move(this.board.getField(moveLoopCol,moveLoopRow),this.board,false)){
+                                    if (this.board.getField(moveLoopCol,moveLoopRow).get().getClass().getName().equals("figures.kral")){
+                                        this.check = true;
+                                        return;
+                                    }
+                                }
+                            }
+                        }
+            }
+        }
+        this.check = false;
+        return;
     }
 
     public boolean getCheck() {return this.check;}

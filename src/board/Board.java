@@ -1,6 +1,8 @@
 package board;
 
 
+import chess.Game;
+
 /**
  * @brief Třída reprezentující hrací desku. Deska má velikost (rozměr) N a je tvořena maticí N x N polí.
  * Pole jsou umístěna na řádcích a sloupcích, které jsou číslovány od 1 do N. Pole jsou identifikována dvojici (c, r),
@@ -11,7 +13,7 @@ package board;
 public class Board {
     private BoardField[][] playboard;
     private int size;
-    //private  Game game;
+    //private  chess.Game game;
     /*
     |14|24|34|44|
     |13|23|33|43|

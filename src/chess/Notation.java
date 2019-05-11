@@ -1,3 +1,5 @@
+package chess;
+
 import board.Board;
 import figures.Figure;
 

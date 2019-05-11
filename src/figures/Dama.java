@@ -68,15 +68,6 @@ public class Dama extends AbstractFigure {
             }
 
             this.reposition(field, board);
-            for (int loop_col = 1; loop_col < board.getSize()+1;loop_col++) {
-                for (int loop_row = 1; loop_row < board.getSize() + 1; loop_row++) {
-                    if (this.move(board.getField(loop_col,loop_row),board, false)){
-                        if (board.getField(loop_col, loop_row).get().getClass().getName().toLowerCase().equals("figures.kral")){
-                            //šach true
-                        }
-                    }
-                }
-            }
         }
         return true;
 

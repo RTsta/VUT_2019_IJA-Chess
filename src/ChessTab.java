@@ -1,3 +1,5 @@
+import chess.ChessGame;
+import chess.Notation;
 import board.Board;
 import board.Field;
 import javafx.event.ActionEvent;
@@ -313,5 +315,6 @@ public class ChessTab extends Tab {
             //System.out.println("Mat");
             //TODO mat bila/cerna
         }
+        displayGame();
     }
 }
