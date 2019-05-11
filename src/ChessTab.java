@@ -18,7 +18,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.concurrent.TimeUnit;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ChessTab extends Tab {
 
@@ -48,7 +49,8 @@ public class ChessTab extends Tab {
 
     private int lapsCounter;
 
-    private boolean playPause;
+    private Timer timer;
+    private TimerTask task;
 
 
     public ChessTab(String name){
@@ -130,19 +132,11 @@ public class ChessTab extends Tab {
                         displayGame();
                     });
                     this.playBtn.setOnAction((ActionEvent) ->{
-                        this.playPause = true;
-                        while (this.playPause && chessGame.getListPos() < chessGame.getSizeOfList()-1) {
-                            chessGame.redo();
-                            displayGame();
-                            try {
-                                TimeUnit.SECONDS.sleep(2);
-                            } catch (InterruptedException e) {}
-                        }
+                        timer.schedule(task, 1000L);
                     });
 
                     this.pauseBtn.setOnAction((ActionEvent) ->{
-                        this.playPause = false;
-
+                        timer.cancel();
                     });
                                                                                     //----------------------------------
             VBox rightChessBox = new VBox();                                        //----------------------------------
@@ -186,7 +180,12 @@ public class ChessTab extends Tab {
 
         lapsCounter = 1;
 
-        playPause = false;
+        task = new TimerTask() {
+            public void run() {
+                chessGame.redo();
+                displayGame();
+            }
+        };
     }
 
     /**
