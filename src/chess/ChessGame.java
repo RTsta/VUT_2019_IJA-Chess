@@ -77,14 +77,9 @@ public class ChessGame implements Game {
         Figure f = field.get();
         boolean b = figure.move(field, this.board, true);
         if(b){
-<<<<<<< HEAD
-            this.stack.push(new Move(prevf, figure, f, field));
-            //testCheck();
-=======
             this.list.add(new Move(prevf, figure, f, field));
             this.listPos++;
             testCheck();
->>>>>>> fceb3899a337437a041ae74fe58dc888815e65d5
         }
         return b;
     }
@@ -113,16 +108,16 @@ public class ChessGame implements Game {
             this.listPos++;
             this.whitesTurn = !this.whitesTurn;
         }
-        //testCheck();
+        testCheck();
     }
 
     /*
-    * @brief metoda testující jestli nastal šach ve hře a případně nastavuje příznak check
-    *
-    * - procházím postupně ceslou šachovnici a z každého poláčka si vyberu tmpFigure
-    * dalším cyklem postupně testuji všechny místa šachovnice, jestli na ně může figurka jít
-    * v případě úspěchu, že figurka na to místo může jít, tak testuji, jeestli náhodu na tom místě není král a pokud je, tak se nastavuje příznak check na true
-    * */
+     * @brief metoda testující jestli nastal šach ve hře a případně nastavuje příznak check
+     *
+     * - procházím postupně ceslou šachovnici a z každého poláčka si vyberu tmpFigure
+     * dalším cyklem postupně testuji všechny místa šachovnice, jestli na ně může figurka jít
+     * v případě úspěchu, že figurka na to místo může jít, tak testuji, jeestli náhodu na tom místě není král a pokud je, tak se nastavuje příznak check na true
+     * */
 
     private void testCheck() {
         this.whiteCheck = false;
