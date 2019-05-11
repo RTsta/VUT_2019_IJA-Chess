@@ -9,18 +9,19 @@ public class Dama extends AbstractFigure {
         shortcut = "D";
     }
 
-    @Override
-    public String getState() {
-        return "Q[" + (this.isWhite ? "W" : "B") + "]" + Integer.toString(this.col) + ":" + Integer.toString(this.row);
-    }
-
     /*
     |  |24|  |44|
     |13|23|33|  |
     |12|::|32|42|
     |11|21|31|  |
      */
-    //TODOotestovat
+    /**
+     * Tah figurkou
+     * @param field Cílové políčko, na které má dojít k přesunu
+     * @param board Hrací deska, kde se pohybovaná figurka nachází
+     * @param realMove Booleanovská hodnota, jestli se má tah opravdu provést, nebo zdali jde jen o zjištění providitelnosti tahu
+     * @return True - v případě úspěchu, False v případě, že tah není možný
+     */
     @Override
     public boolean move(Field field, Board board, boolean realMove) {
         /* pohyb na místo, na kterém se právě nachází */
@@ -46,6 +47,6 @@ public class Dama extends AbstractFigure {
             if (board.getField(startCol, startRow) == null) { return false; }
             if(board.getField(startCol, startRow).get() != null && !(startCol == endCol && startRow == endRow)){ return false; }
         }
-        return finalMove(field, board, realMove);
+        return realMove ? finalMove(field, board): true;
     }
 }

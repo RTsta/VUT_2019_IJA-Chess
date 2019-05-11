@@ -9,10 +9,18 @@ import javafx.stage.Stage;
 public class MainWindow extends Application {
     final int SIZE = 8;
 
+    /**
+     * Vstupní metoda programu
+     * @param args argumenty
+     */
     public static void main(String[] args) {
         launch(args);
     }
 
+    /**
+     * Vstupní metoda JavaFx
+     * @param primaryStage
+     */
     @Override
     public void start(Stage primaryStage) {
         primaryStage.setTitle("Terrible chess");

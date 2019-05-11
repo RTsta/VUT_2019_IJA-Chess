@@ -16,18 +16,19 @@ public class Pesak extends AbstractFigure{
         beenMoved = false;
     }
 
-    @Override
-    public String getState(){
-        return "P["+(this.isWhite ? "W" : "B")+"]"+Integer.toString(this.col)+":"+Integer.toString(this.row);
-    }
-
     /*
     |  |  |  |  |
     |  |  |  |  |
     |  |22|  |  |
     |  |::|  |  |
      */
-
+    /**
+     * Tah figurkou
+     * @param field Cílové políčko, na které má dojít k přesunu
+     * @param board Hrací deska, kde se pohybovaná figurka nachází
+     * @param realMove Booleanovská hodnota, jestli se má tah opravdu provést, nebo zdali jde jen o zjištění providitelnosti tahu
+     * @return True - v případě úspěchu, False v případě, že tah není možný
+     */
     @Override
     public boolean move(Field field, Board board, boolean realMove){
         if(field.getCol() == this.col && field.getRow() - this.row == (isWhite ? 1 : -1) && field.get() == null){

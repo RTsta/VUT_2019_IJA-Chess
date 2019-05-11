@@ -129,6 +129,10 @@ public class ChessTab extends Tab {
         lapsCounter = 1;
     }
 
+    /**
+     * Metoda k vytvoření GUI šachového pole
+     * @return GridPane Vytvořená šachová deska
+     */
    private GridPane createNewChessGrid(){
 
             /*
@@ -184,6 +188,11 @@ public class ChessTab extends Tab {
         return chessGrid;
     }
 
+    /**
+     * Metoda která překreslí celou hru podle aktuálního stavu Boardu
+     * <p> Mění pozici figurek na GUI hrací desky
+     * Aktualizuje Labels</p>
+     */
     public void displayGame() {
         Board b = this.chessGame.getBoard();
 
@@ -287,13 +296,17 @@ public class ChessTab extends Tab {
         else {turnsLabel.setText("Táhne - černý");}
 
         checkLabel.setText("ŠACH\n");
-        if (chessGame.isCheck(true)){checkLabel.setText(checkLabel.getText()+"- bílý\n");}
-        if (chessGame.isCheck(false)){checkLabel.setText(checkLabel.getText()+"- cerny\n");}
+        if (chessGame.isCheck(true)){ checkLabel.setText(checkLabel.getText()+"- bílý\n"); }
+        if (chessGame.isCheck(false)){ checkLabel.setText(checkLabel.getText()+"- cerny\n"); }
 
         if (!(chessGame.isCheck(true) || chessGame.isCheck(false))){checkLabel.setText("");}
 
     }
 
+    /**
+     * Metoda provádí zpracovávající pohyby na GUI hraci desky po kliknutí na jednotlivá políčka
+     * @param id Políčka, na které bylo kliknuto ( id = "col" + "row")
+     */
     private void gameMove(String id){
         if (evenClick) {
             if (chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get()!= null && chessGame.isWhitesTurn() == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
@@ -327,15 +340,29 @@ public class ChessTab extends Tab {
         }
     }
 
-
+    /**
+     * Pomocná metoda k získání sloupce z id políčka
+     * @param id Políčka, na které bylo kliknuto ( id = "col" + "row")
+     * @return int číslo sloupce
+     */
     private int parseColFromID(String id){
         return Integer.parseInt(id)/10;
     }
 
+    /**
+     * Pomocná metoda k získání řádku z id políčka
+     * @param id Políčka, na které bylo kliknuto ( id = "col" + "row")
+     * @return int číslo řádku
+     */
     private int parseRowFromID(String id){
         return Integer.parseInt(id)%10;
     }
 
+    /**
+     * Metoda k načtení vstupní notace
+     * @param moves textový řetězec s notací
+     * @return boolean True - pokud byla notace ve správném formátu
+     */
     private boolean importMoves(String moves) {
         Notation notation = new Notation(moves);
         while (!notation.isEnd()) {
@@ -349,6 +376,11 @@ public class ChessTab extends Tab {
         return true;
     }
 
+    /**
+     * Metoda provádějící pohyb dle zadané notace
+     * @param notation Notace, podle které má být proveden tah
+     * @param isWhite Barva hráče
+     */
     private void notationMove(Notation notation, boolean isWhite) {
         chessGame.move(chessGame.getBoard().getField(notation.getSrcCol(isWhite), notation.getSrcRow(isWhite)).get(),chessGame.getBoard().getField(notation.getDecCol(isWhite),notation.getDesRow(isWhite)));
         //if (notation.isTakeFigure(true)) {}

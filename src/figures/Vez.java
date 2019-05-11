@@ -19,13 +19,13 @@ public class Vez extends AbstractFigure {
         super(col, row, isWhite);
         shortcut = "V";
     }
-
-
-    @Override
-    public String getState(){
-        return "V["+(this.isWhite ? "W" : "B")+"]"+Integer.toString(this.col)+":"+Integer.toString(this.row);
-    }
-
+    /**
+     * Tah figurkou
+     * @param field Cílové políčko, na které má dojít k přesunu
+     * @param board Hrací deska, kde se pohybovaná figurka nachází
+     * @param realMove Booleanovská hodnota, jestli se má tah opravdu provést, nebo zdali jde jen o zjištění providitelnosti tahu
+     * @return True - v případě úspěchu, False v případě, že tah není možný
+     */
     @Override
     public boolean move(Field field, Board board, boolean realMove){
 
@@ -52,7 +52,7 @@ public class Vez extends AbstractFigure {
             if(board.getField(startCol, startRow).get() != null && !(startCol == endCol && startRow == endRow)){ return false; }
         }
 
-        return finalMove(field, board, realMove);
+        return realMove ? finalMove(field, board): true;
     }
 
 }

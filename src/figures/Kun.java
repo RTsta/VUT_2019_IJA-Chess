@@ -20,16 +20,17 @@ public class Kun extends AbstractFigure {
         shortcut = "J";
     }
 
-    @Override
-    public String getState() {
-        return "K["+(this.isWhite ? "W" : "B")+"]"+Integer.toString(this.col)+":"+Integer.toString(this.row);
-    }
-
     /* vždy skáču takto -> |startRow - endrow| = 2 && |startCol-endCol| = 1 nebo
     *                      |startCol - endCol| = 2 && |startRow-endRow| = 1
     *
     * */
-    //TODO otestovat
+    /**
+     * Tah figurkou
+     * @param field Cílové políčko, na které má dojít k přesunu
+     * @param board Hrací deska, kde se pohybovaná figurka nachází
+     * @param realMove Booleanovská hodnota, jestli se má tah opravdu provést, nebo zdali jde jen o zjištění providitelnosti tahu
+     * @return True - v případě úspěchu, False v případě, že tah není možný
+     */
     @Override
     public boolean move(Field field, Board board, boolean realMove) {
 
@@ -48,7 +49,7 @@ public class Kun extends AbstractFigure {
 
         if ( ( Math.abs(startRow-endRow) == 2 ) && ( Math.abs(startCol-endCol) == 1 ) ||
              ( Math.abs(startCol-endCol) == 2 ) && ( Math.abs(startRow-endRow) == 1 ) ){
-            return finalMove(field, board, realMove);
+            return realMove ? finalMove(field, board): true;
         }
         else{
             return false;

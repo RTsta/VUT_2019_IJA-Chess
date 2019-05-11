@@ -72,6 +72,12 @@ public class ChessGame implements Game {
         return this.board;
     }
 
+    /**
+     * Přesune figuru na zadané políčko, pokud je to možné. Pokud je operace úspěšná, lze provést její reverzní krok (tj. vrátit tah zpět) vyvoláním operace undo().
+     * @param figure - Přesunovaná figura.
+     * @param field - Cílové pole.
+     * @return Úspěšnost operace.
+     */
     @Override
     public boolean move(Figure figure, Field field){
         Field prevf = this.board.getField(figure.getCol(), figure.getRow());
@@ -87,7 +93,9 @@ public class ChessGame implements Game {
         }
         return b;
     }
-
+    /**
+     * Provede reverzní operaci (tah) nad hrou. Opakovaným voláním této operace lze vrátit všechny dosud provedené tahy až na začátek hry.
+     */
     @Override
     public void undo(){
         if (this.list.size() > 0 && this.listPos >= 0){
@@ -103,6 +111,10 @@ public class ChessGame implements Game {
         testCheck();
     }
 
+    /**
+     * Provede reverzní operaci (tah) k metodě Undo. Opakovaným voláním této operace lze vrátit všechny dosud provedené tahy až na konec hry.
+     */
+    @Override
     public void redo(){
         if (this.list.size() > 0 && this.listPos < this.list.size()-1){
             Move m = this.list.get(this.listPos+1);
@@ -115,14 +127,12 @@ public class ChessGame implements Game {
         testCheck();
     }
 
-    /*
-     * @brief metoda testující jestli nastal šach ve hře a případně nastavuje příznak check
+    /**
+     * Metoda testující jestli nastal šach ve hře a případně nastavuje příznak check
      *
-     * - procházím postupně ceslou šachovnici a z každého poláčka si vyberu tmpFigure
-     * dalším cyklem postupně testuji všechny místa šachovnice, jestli na ně může figurka jít
-     * v případě úspěchu, že figurka na to místo může jít, tak testuji, jeestli náhodu na tom místě není král a pokud je, tak se nastavuje příznak check na true
+     * <p>Nejprve se naleznou oba králové. Pokud nebyli nalezeni -> mat a konec hry.
+     * Jinak se u všech figurek na šachovnici vyzkouší, zda mohou protivníkova krále vyhodit</p>
      * */
-
     private void testCheck() {
         this.whiteCheck = false;
         this.blackCheck = false;
@@ -135,7 +145,7 @@ public class ChessGame implements Game {
                 Field tmpField = this.board.getField(loopCol, loopRow);
                 if (tmpField != null) {
                     if (tmpField.get() != null) {
-                        if (tmpField.get().getClass().getName().compareTo("figures.kral") == 0) {
+                        if (tmpField.get().getClass().getName().toLowerCase().compareTo("figures.kral") == 0) {
                             if (tmpField.get().isWhite()) {
                                 kingW = tmpField.get();
                             } else {
@@ -161,11 +171,11 @@ public class ChessGame implements Game {
                     if (tmpFig != null) {
                         if (tmpFig.isWhite()) {
                             if (tmpFig.move(board.getField(kingB.getCol(),kingB.getRow()),board,false)) {
-                                this.whiteCheck = true;
+                                this.blackCheck = true;
                             }
                         } else {
                             if (tmpFig.move(board.getField(kingW.getCol(),kingW.getRow()),board,false)) {
-                                this.blackCheck = true;
+                                this.whiteCheck = true;
                             }
                         }
                     }
@@ -174,18 +184,36 @@ public class ChessGame implements Game {
         }
     }
 
+    /**
+     * Metoda sloužící pro zjištění šachu určeného hráče.
+     * @param isWhite Barva hráče
+     * @return boolean Je šach?
+     */
     public boolean isCheck(boolean isWhite) {
         return isWhite ? this.whiteCheck : this.blackCheck;
     }
 
+    /**
+     * Metoda sloužící pro zjištění matu určeného hráče.
+     * @param isWhite Barva hráče
+     * @return boolean Je mat?
+     */
     public boolean isMate(boolean isWhite){
         return isWhite ? this.whiteMate : this.blackMate;
     }
 
+    /**
+     * Metoda nastavuje, který hráč je na řadě
+     * @param isWhite Barva hráče
+     */
     public void setWhitesTurn(boolean isWhite){
         this.whitesTurn = isWhite;
     }
 
+    /**
+     * Zjištění, který hráč je na řadě
+     * @return boolean True, pokud je na řadě bílý hráč
+     */
     public boolean isWhitesTurn() {
         return this.whitesTurn;
     }
@@ -204,18 +232,34 @@ public class ChessGame implements Game {
             this.tof = tof;
         }
 
+        /**
+         * Kterou figurkou se hýbalo.
+         * @return Figure Figurka
+         */
         public Figure getFigure(){
             return this.what;
         }
 
+        /**
+         * Odkud se figurka při tahu pohybovala
+         * @return Field políčko
+         */
         public Field getField(){
             return this.ffrom;
         }
 
+        /**
+         * Která figurka byla v tahu vyhozena
+         * @return Figure Vyhozená figurka
+         */
         public Figure getRemoved(){
             return this.prevF;
         }
 
+        /**
+         * Políčko, na které se uskutečnil v tahu přesun
+         * @return Field políčko
+         */
         public Field getToField(){
             return this.tof;
         }

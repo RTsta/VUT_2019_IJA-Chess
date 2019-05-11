@@ -32,10 +32,10 @@ public class Board {
     }
 
     /**
-     *
+     *Tato metoda slouží k získání daného políčka hrací desky
      * @param col - číslo sloupce
      * @param row - číslo řádku
-     * @return Pole na pozici (col, row).
+     * @return Field Pole na pozici (col, row).
      */
     public Field getField(int col, int row)  {
         if(col > size || row > size || row < 1 || col < 1){
@@ -45,6 +45,10 @@ public class Board {
         }
     }
 
+    /**
+     *TAto metoda slouží ke zjištění velikosti desky.
+     * @return int Velikost Boardu
+     */
     public int getSize(){
         return this.size;
     }

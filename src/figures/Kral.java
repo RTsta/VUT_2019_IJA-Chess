@@ -21,12 +21,13 @@ public class Kral extends AbstractFigure {
         shortcut = "K";
     }
 
-    @Override
-    public String getState() {
-        return "K["+(this.isWhite ? "W" : "B")+"]"+Integer.toString(this.col)+":"+Integer.toString(this.row);
-    }
-
-    //TODO otestovat
+    /**
+     * Tah figurkou
+     * @param field Cílové políčko, na které má dojít k přesunu
+     * @param board Hrací deska, kde se pohybovaná figurka nachází
+     * @param realMove Booleanovská hodnota, jestli se má tah opravdu provést, nebo zdali jde jen o zjištění providitelnosti tahu
+     * @return True - v případě úspěchu, False v případě, že tah není možný
+     */
     @Override
     public boolean move(Field field, Board board, boolean realMove) {
         /* pohyb na místo, na kterém se právě nachází */
@@ -45,6 +46,6 @@ public class Kral extends AbstractFigure {
             return false;
         }
 
-        return finalMove(field, board, realMove);
+        return realMove ? finalMove(field, board): true;
     }
 }

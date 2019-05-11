@@ -8,7 +8,7 @@ import board.Field;
 public interface Game {
 
     /**
-     * @brief Přesune figuru na zadané políčko, pokud je to možné. Pokud je operace úspěšná, lze provést její reverzní krok (tj. vrátit tah zpět) vyvoláním operace undo().
+     * Přesune figuru na zadané políčko, pokud je to možné. Pokud je operace úspěšná, lze provést její reverzní krok (tj. vrátit tah zpět) vyvoláním operace undo().
      * @param figure - Přesunovaná figura.
      * @param field - Cílové pole.
      * @return Úspěšnost operace.
@@ -16,7 +16,12 @@ public interface Game {
     boolean move(Figure figure, Field field);
 
     /**
-     * @brief Provede reverzní operaci (tah) nad hrou. Opakovaným voláním této operace lze vrátit všechny dosud provedené tahy až na začátek hry.
+     * Provede reverzní operaci (tah) nad hrou. Opakovaným voláním této operace lze vrátit všechny dosud provedené tahy až na začátek hry.
      */
     void undo();
+
+    /**
+     * Provede reverzní operaci (tah) k metodě Undo. Opakovaným voláním této operace lze vrátit všechny dosud provedené tahy až na konec hry.
+     */
+    void redo();
 }
