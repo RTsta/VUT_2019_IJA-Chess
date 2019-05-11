@@ -49,7 +49,7 @@ public class Vez extends AbstractFigure {
                 startRow += startRow < endRow ? 1 : -1;
             }
             if (board.getField(startCol, startRow) == null) { return false; }
-            if(board.getField(startCol, startRow).get() != null){ return false; }
+            if(board.getField(startCol, startRow).get() != null && !(startCol == endCol && startRow == endRow)){ return false; }
         }
 
         return finalMove(field, board, realMove);
