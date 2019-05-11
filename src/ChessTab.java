@@ -25,6 +25,7 @@ public class ChessTab extends Tab {
     private Boolean evenClick;
     private String srcClick;
     private String destClick;
+    private String lastWhitesMove;
 
     private Boolean whitesTurn;
     private int lapsCounter;
@@ -84,6 +85,7 @@ public class ChessTab extends Tab {
 
         srcClick = "";
         destClick = "";
+        lastWhitesMove = "";
 
         whitesTurn = true;
         lapsCounter = 1;
@@ -254,18 +256,22 @@ public class ChessTab extends Tab {
         } else {
             destClick = id;
             if (srcClick != destClick){
-                int s_col =parseColFromID(srcClick);
+                int s_col = parseColFromID(srcClick);
                 int s_row = parseRowFromID(srcClick);
                 int d_col = parseColFromID(destClick);
                 int d_row = parseRowFromID(destClick);
-                //todo přidavat do textfieldu až když potáhne i černý hráš a mezitím si někde ukládat co za tah udělal bílý
                 Boolean a = chessGame.move(chessGame.getBoard().getField(s_col, s_row).get(), chessGame.getBoard().getField(d_col,d_row));
                 if (a) {
-                    System.out.println();
-                    sideListView.getItems().add(lapsCounter + ". "+chessGame.getBoard().getField(d_col,d_row).get().getShortcut()+((char) ((s_col)+'a'-1)) + s_row + ((char) (d_col+'a'-1)) +d_row);
+                    if (whitesTurn){
+                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row;
+                    }
+                    else {
+                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row);
+                        lastWhitesMove = "";
+                        lapsCounter++;
+                    }
                     whitesTurn = !whitesTurn;
                     displayGame();
-                    lapsCounter++;
                 }
             }
             srcClick = "";

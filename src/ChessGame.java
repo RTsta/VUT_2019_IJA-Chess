@@ -8,6 +8,8 @@ public class ChessGame implements Game {
 
     private Board board;
     private int numberOfAliveFigures;
+    private boolean check;
+    private boolean mate;
     private Stack<Move> stack;
 
     /*
@@ -21,6 +23,8 @@ public class ChessGame implements Game {
         |VB|KB|SB|DB|KB|SB|KB|VB|  *  |11|21|31|41|51|61|71|81|
      */
     public ChessGame(Board board){
+        this.check = false;
+        this.mate = false;
         this.board = board;
         this.stack = new Stack<Move>();
 
@@ -83,6 +87,10 @@ public class ChessGame implements Game {
         }
     }
 
+    public boolean getCheck() {return this.check;}
+
+    public boolean getMate(){return this.mate;}
+
     private class Move{
 
         private Field ffrom;
@@ -112,6 +120,7 @@ public class ChessGame implements Game {
         public Field getToField(){
             return this.tof;
         }
+
     }
 }
 
