@@ -38,6 +38,7 @@ public class ChessTab extends Tab {
     private String srcClick;
     private String destClick;
     private String lastWhitesMove;
+    private boolean gameTouched;
 
     private int lapsCounter;
 
@@ -81,6 +82,7 @@ public class ChessTab extends Tab {
                         leftSideListBox.getChildren().remove(sideImportTextArea);
                         topNavigationButtons.getChildren().remove(btn1);
                         topNavigationButtons.getChildren().addAll(rldBtn, playPauseBtn);
+                        gameTouched = true;
                         if (!importMoves(sideImportTextArea.getText())) {
                             // TODO error okno
                         }
@@ -133,6 +135,7 @@ public class ChessTab extends Tab {
         srcClick = "";
         destClick = "";
         lastWhitesMove = "";
+        gameTouched = false;
 
         lapsCounter = 1;
     }
@@ -316,10 +319,11 @@ public class ChessTab extends Tab {
      * @param id Políčka, na které bylo kliknuto ( id = "col" + "row")
      */
     private void gameMove(String id){
-        if (lapsCounter < 2){
+        if (gameTouched == false){
             leftSideListBox.getChildren().remove(sideImportTextArea);
             topNavigationButtons.getChildren().remove(btn1);
             topNavigationButtons.getChildren().addAll(rldBtn, playPauseBtn);
+            gameTouched = true;
         }
         if (evenClick) {
             if (chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get()!= null && chessGame.isWhitesTurn() == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
