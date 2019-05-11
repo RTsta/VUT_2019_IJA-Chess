@@ -78,6 +78,9 @@ public class ChessGame implements Game {
         Figure f = field.get();
         boolean b = figure.move(field, this.board, true);
         if(b){
+            while (this.listPos < this.list.size()-1) {
+                this.list.remove(this.list.size()-1);
+            }
             this.list.add(new Move(prevf, figure, f, field));
             this.listPos++;
             testCheck();
@@ -157,11 +160,11 @@ public class ChessGame implements Game {
                     Figure tmpFig = tmpField.get();
                     if (tmpFig != null) {
                         if (tmpFig.isWhite()) {
-                            if (tmpFig.move(board.getField(kingW.getCol(),kingW.getRow()),board,false)) {
+                            if (tmpFig.move(board.getField(kingB.getCol(),kingB.getRow()),board,false)) {
                                 this.whiteCheck = true;
                             }
                         } else {
-                            if (tmpFig.move(board.getField(kingB.getCol(),kingB.getRow()),board,false)) {
+                            if (tmpFig.move(board.getField(kingW.getCol(),kingW.getRow()),board,false)) {
                                 this.blackCheck = true;
                             }
                         }
