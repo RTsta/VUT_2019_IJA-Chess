@@ -18,8 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 
-import java.util.Timer;
-import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
 
 public class ChessTab extends Tab {
 
@@ -49,8 +48,7 @@ public class ChessTab extends Tab {
 
     private int lapsCounter;
 
-    private Timer timer;
-    private TimerTask task;
+    private boolean playPause;
 
 
     public ChessTab(String name){
@@ -132,11 +130,18 @@ public class ChessTab extends Tab {
                         displayGame();
                     });
                     this.playBtn.setOnAction((ActionEvent) ->{
-                        timer.schedule(task, 1000L);
+                        this.playPause = true;
+                        while (this.playPause && chessGame.getListPos() < chessGame.getSizeOfList()-1) {
+                            chessGame.redo();
+                            try {
+                                TimeUnit.SECONDS.sleep(2);
+                            } catch (InterruptedException e) {}
+                        }
                     });
 
                     this.pauseBtn.setOnAction((ActionEvent) ->{
-                        timer.cancel();
+                        this.playPause = false;
+
                     });
                                                                                     //----------------------------------
             VBox rightChessBox = new VBox();                                        //----------------------------------
@@ -180,12 +185,7 @@ public class ChessTab extends Tab {
 
         lapsCounter = 1;
 
-        task = new TimerTask() {
-            public void run() {
-                chessGame.redo();
-                displayGame();
-            }
-        };
+        playPause = false;
     }
 
     /**
@@ -348,7 +348,6 @@ public class ChessTab extends Tab {
                 r_id++;
                 c_id--;
             }
-
         }
 
         if (chessGame.isWhitesTurn()){ turnsLabel.setText("Táhne - bílý");}
@@ -359,7 +358,6 @@ public class ChessTab extends Tab {
         if (chessGame.isCheck(false)){ checkLabel.setText(checkLabel.getText()+"- cerny\n"); }
 
         if (!(chessGame.isCheck(true) || chessGame.isCheck(false))){checkLabel.setText("");}
-
     }
 
     /**
