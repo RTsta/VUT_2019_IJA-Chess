@@ -10,8 +10,8 @@ public class ChessGame implements Game {
 
     private Board board;
     //private int numberOfAliveFigures;
-    private boolean check;
-    private boolean mate;
+    private boolean whiteCheck; // bílý dává šach
+    private boolean blackCheck; //černý dává šach
     private Stack<Move> stack;
 
     /*
@@ -25,8 +25,8 @@ public class ChessGame implements Game {
         |VB|KB|SB|DB|KB|SB|KB|VB|  *  |11|21|31|41|51|61|71|81|
      */
     public ChessGame(Board board){
-        this.check = false;
-        this.mate = false;
+        this.whiteCheck = false;
+        this.blackCheck = false;
         this.board = board;
         this.stack = new Stack<Move>();
 
@@ -71,6 +71,7 @@ public class ChessGame implements Game {
         boolean b = figure.move(field, this.board, true);
         if(b){
             this.stack.push(new Move(prevf, figure, f, field));
+            testCheck();
         }
         return b;
     }
@@ -87,6 +88,7 @@ public class ChessGame implements Game {
             }
 
         }
+        testCheck();
     }
 
     /*
@@ -98,6 +100,8 @@ public class ChessGame implements Game {
     * */
 
     private void testCheck(){
+        this.blackCheck = false;
+        this.whiteCheck = false;
         for (int loopCol = 1; loopCol < this.board.getSize()+1;loopCol++){
             for (int loopRow = 1; loopRow < this.board.getSize()+1;loopRow++){
                 Figure tmpFigure = this.board.getField(loopRow, loopRow).get();
@@ -105,21 +109,34 @@ public class ChessGame implements Game {
                             for (int moveLoopRow = 1; moveLoopRow < this.board.getSize()+1 ; moveLoopRow++){
                                 if (tmpFigure.move(this.board.getField(moveLoopCol,moveLoopRow),this.board,false)){
                                     if (this.board.getField(moveLoopCol,moveLoopRow).get().getClass().getName().equals("figures.kral")){
-                                        this.check = true;
-                                        return;
+                                        if (tmpFigure.isWhite()) { this.whiteCheck = true; }
+                                        else {this.blackCheck = true;}
                                     }
                                 }
                             }
                         }
             }
         }
-        this.check = false;
-        return;
     }
 
-    public boolean getCheck() {return this.check;}
+    private boolean isMate(){
+        int numberOfKings= 0;
+        for (int loopCol = 1; loopCol < this.board.getSize()+1;loopCol++){
+            for (int loopRow = 1; loopRow < this.board.getSize()+1;loopRow++) {
+                if (this.board.getField(loopRow, loopRow).get().getClass().getName().equals("figures.kral")){
+                    numberOfKings++;
+                }
+            }
+        }
+        if (numberOfKings < 2){
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    public boolean getMate(){return this.mate;}
+    public boolean isWhiteCheck() {return this.whiteCheck;}
+    public boolean isBlackCheck(){return this.blackCheck;}
 
     private class Move{
 
