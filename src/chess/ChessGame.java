@@ -3,16 +3,20 @@ package chess;
 import board.Board;
 import board.Field;
 import figures.*;
-
-import java.util.Stack;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ChessGame implements Game {
 
     private Board board;
     //private int numberOfAliveFigures;
+    private boolean whitesTurn;
     private boolean whiteCheck; // bílý dává šach
     private boolean blackCheck; //černý dává šach
-    private Stack<Move> stack;
+    private boolean whiteMate;
+    private boolean blackMate;
+    private List<Move> list;
+    private int listPos;
 
     /*
         |VC|KC|SC|KC|DC|SC|KC|VC|  *  |18|28|38|48|58|68|78|88|
@@ -27,8 +31,11 @@ public class ChessGame implements Game {
     public ChessGame(Board board){
         this.whiteCheck = false;
         this.blackCheck = false;
+        this.whiteMate = false;
+        this.blackMate = false;
         this.board = board;
-        this.stack = new Stack<Move>();
+        this.list = new ArrayList<Move>();
+        this.listPos = -1;
 
         /* put bílých figurek*/
         board.getField(1,1).put(new Vez(1,1,true));
@@ -70,22 +77,41 @@ public class ChessGame implements Game {
         Figure f = field.get();
         boolean b = figure.move(field, this.board, true);
         if(b){
+<<<<<<< HEAD
             this.stack.push(new Move(prevf, figure, f, field));
             //testCheck();
+=======
+            this.list.add(new Move(prevf, figure, f, field));
+            this.listPos++;
+            testCheck();
+>>>>>>> fceb3899a337437a041ae74fe58dc888815e65d5
         }
         return b;
     }
 
     @Override
     public void undo(){
-        if(!this.stack.empty()){
-            Move m = stack.pop();
+        if (this.list.size() > 0 && this.listPos >= 0){
+            Move m = this.list.get(this.listPos);
             m.getToField().remove();
             m.getField().put(m.getFigure());
             if(m.getRemoved() != null){
                 m.getToField().put(m.getRemoved());
             }
+            this.listPos--;
+            this.whitesTurn = !this.whitesTurn;
+        }
+        testCheck();
+    }
 
+    public void redo(){
+        if (this.list.size() > 0 && this.listPos < this.list.size()-1){
+            Move m = this.list.get(this.listPos+1);
+            m.getField().remove();
+            m.getToField().remove();
+            m.getToField().put(m.getFigure());
+            this.listPos++;
+            this.whitesTurn = !this.whitesTurn;
         }
         //testCheck();
     }
@@ -100,35 +126,66 @@ public class ChessGame implements Game {
 
     private void testCheck() {
         this.whiteCheck = false;
-        for (int loopCol = 1; loopCol < this.board.getSize() + 1; loopCol++) {
-            for (int loopRow = 1; loopRow < this.board.getSize() + 1; loopRow++) {
+        this.blackCheck = false;
+        this.whiteMate = false;
+        this.blackMate = false;
+        Figure kingW = null;
+        Figure kingB = null;
+        for (int loopCol = 1; loopCol <= this.board.getSize(); loopCol++) {
+            for (int loopRow = 1; loopRow <= this.board.getSize(); loopRow++) {
                 Field tmpField = this.board.getField(loopCol, loopRow);
-                if (tmpField == null) {
-                    continue;
-                } else if (tmpField.get().getClass().getName().compareTo("figures.kral") == 0) {
+                if (tmpField != null) {
+                    if (tmpField.get() != null) {
+                        if (tmpField.get().getClass().getName().compareTo("figures.kral") == 0) {
+                            if (tmpField.get().isWhite()) {
+                                kingW = tmpField.get();
+                            } else {
+                                kingB = tmpField.get();
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if (kingW == null || kingB == null) {
+            this.whiteMate = (kingW == null);
+            this.blackMate = (kingB == null);
+            this.whiteCheck = (kingW == null);
+            this.blackCheck = (kingB == null);
+            return;
+        }
+        for (int loopCol = 1; loopCol <= this.board.getSize(); loopCol++) {
+            for (int loopRow = 1; loopRow <= this.board.getSize(); loopRow++) {
+                Field tmpField = this.board.getField(loopCol, loopRow);
+                if (tmpField != null) {
+                    Figure tmpFig = tmpField.get();
+                    if (tmpFig != null) {
+                        if (tmpFig.isWhite()) {
+                            if (tmpFig.move(board.getField(kingW.getCol(),kingW.getRow()),board,false)) {
+                                this.whiteCheck = true;
+                            }
+                        } else {
+                            if (tmpFig.move(board.getField(kingB.getCol(),kingB.getRow()),board,false)) {
+                                this.blackCheck = true;
+                            }
+                        }
+                    }
                 }
             }
         }
     }
 
-    private boolean isMate(){
-        int numberOfKings= 0;
-        for (int loopCol = 1; loopCol < this.board.getSize()+1;loopCol++){
-            for (int loopRow = 1; loopRow < this.board.getSize()+1;loopRow++) {
-                if (this.board.getField(loopRow, loopRow).get().getClass().getName().compareTo("figures.kral") == 0){
-                    numberOfKings++;
-                }
-            }
-        }
-        if (numberOfKings < 2){
-            return true;
-        } else {
-            return false;
-        }
+    public boolean isCheck(boolean isWhite) {
+        return isWhite ? this.whiteCheck : this.blackCheck;
     }
 
-    public boolean isWhiteCheck() {return this.whiteCheck;}
-    public boolean isBlackCheck(){return this.blackCheck;}
+    public boolean isMate(boolean isWhite){
+        return isWhite ? this.whiteMate : this.blackMate;
+    }
+
+    public boolean isWhitesTurn() {
+        return this.whitesTurn;
+    }
 
     private class Move{
 
