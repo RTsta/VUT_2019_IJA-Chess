@@ -98,15 +98,24 @@ public class ChessGame implements Game {
     * v případě úspěchu, že figurka na to místo může jít, tak testuji, jeestli náhodu na tom místě není král a pokud je, tak se nastavuje příznak check na true
     * */
 
-    private void testCheck(){
-
+    private void testCheck() {
+        this.whiteCheck = false;
+        for (int loopCol = 1; loopCol < this.board.getSize() + 1; loopCol++) {
+            for (int loopRow = 1; loopRow < this.board.getSize() + 1; loopRow++) {
+                Field tmpField = this.board.getField(loopCol, loopRow);
+                if (tmpField == null) {
+                    continue;
+                } else if (tmpField.get().getClass().getName().compareTo("figures.kral") == 0) {
+                }
+            }
+        }
     }
 
     private boolean isMate(){
         int numberOfKings= 0;
         for (int loopCol = 1; loopCol < this.board.getSize()+1;loopCol++){
             for (int loopRow = 1; loopRow < this.board.getSize()+1;loopRow++) {
-                if (this.board.getField(loopRow, loopRow).get().getClass().getName().equals("figures.kral")){
+                if (this.board.getField(loopRow, loopRow).get().getClass().getName().compareTo("figures.kral") == 0){
                     numberOfKings++;
                 }
             }
