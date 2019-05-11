@@ -3,6 +3,7 @@ package chess;
 import board.Board;
 import figures.Figure;
 
+
 public class Notation {
     private String notArr[];
     private int moveCnt;
@@ -35,6 +36,9 @@ public class Notation {
         this.init();
     }
 
+    /**
+     * Metoda na inicializaci třídních proměnných na výchozí hodnoty
+     */
     private void init() {
         this.srcColWhite = 0;
         this.srcRowWhite = 0;
@@ -59,6 +63,11 @@ public class Notation {
         this.currentNotation = "";
     }
 
+    /**
+     * Metoda na načtení následující notace ze zadaného řetězce.
+     * @param board Herní deska
+     * @return boolean True- v případě, že kontrola notace proběhla bez chyby
+     */
     public boolean getMove(Board board) {
         this.init();
         if (this.isEnd()) { return false; }
@@ -73,6 +82,13 @@ public class Notation {
         return true;
     }
 
+    /**
+     * Metoda na zpracování a kontrolu jednotlivé notace tahu
+     * @param move Samotná notace jednoho tahu
+     * @param board Herní deska
+     * @param isWhite Barva hráče
+     * @return boolean True- v případě, že kontrola notace proběhla bez chyby
+     */
     private boolean parseMove(String move, Board board, boolean isWhite) {
         if (move.length() < 2) { return false; }
         if (move.substring(move.length()-1).compareTo("+") == 0) {
@@ -217,6 +233,11 @@ public class Notation {
         return true;
     }
 
+    /**
+     * Metoda, která převede symbol figurky na řetězec
+     * @param figure Znakový symbol figurky
+     * @return String Textový řetezec označující figurku
+     */
     private String figureToString(char figure) {
         switch (figure) {
             case 'K':
@@ -236,6 +257,11 @@ public class Notation {
         }
     }
 
+    /**
+     * Metoda, která zkontroluje, zda znak odpovídá figurkám. Pokud ne, jedná se o pěšáka.
+     * @param f Znakový symbol figurky
+     * @return char Znakový symbol figurky
+     */
     private char typeOfFigure(char f) {
         switch (f) {
             case 'K':
@@ -249,42 +275,90 @@ public class Notation {
         }
     }
 
+    /**
+     * Metoda, která označuje konec seznamu notací
+     * @return boolean True když je konec
+     */
     public boolean isEnd() {
         return this.moveCnt >= this.notArr.length;
     }
 
+    /**
+     * Metoda, která vrací pozici sloupce zdrojového políčka
+     * @param isWhite Barva hráče
+     * @return int Pozice sloupce
+     */
     public int getSrcCol(boolean isWhite) {
         return isWhite ? this.srcColWhite : this.srcColBlack;
     }
 
+    /**
+     * Metoda, která vrací pozici řádku zdrojového políčka
+     * @param isWhite Barva hráče
+     * @return int Pozice řádku
+     */
     public int getSrcRow(boolean isWhite) {
         return isWhite ? this.srcRowWhite : this.srcRowBlack;
     }
 
+    /**
+     * Metoda, která vrací pozici sloupce cílového políčka
+     * @param isWhite Barva hráče
+     * @return int Pozice sloupce
+     */
     public int getDecCol(boolean isWhite) {
         return isWhite ? this.desColWhite : this.desColBlack;
     }
 
+    /**
+     * Metoda, která vrací pozici řádku cílového políčka
+     * @param isWhite Barva hráče
+     * @return int Pozice řádku
+     */
     public int getDesRow(boolean isWhite) {
         return isWhite ? this.desRowWhite : this.desRowBlack;
     }
 
+    /**
+     * Metoda, která vrací, za kterou figurku má být pěšák vyměněn, pokud dojde na konec hrací desky.
+     * @param isWhite Barva hráče
+     * @return char Znakový symbol figurky
+     */
     public char getChangeFigure(boolean isWhite) {
         return isWhite ? this.changeWhite : this.changeBlack;
     }
 
+    /**
+     * Metoda, která vrací, zda se při tahu vyhodila nějaká figurka
+     * @param isWhite Barva hráče
+     * @return boolean True - figurka byla vyhozena
+     */
     public boolean isTakeFigure(boolean isWhite) {
         return isWhite ? this.takeFigureWhite : this.takeFigureBlack;
     }
 
+    /**
+     * Metoda, která zjištuje, zda má zadaný hráč šach
+     * @param isWhite Barva hráče
+     * @return boolean True - má šach
+     */
     public boolean isCheck(boolean isWhite) {
         return isWhite ? this.checkWhite : this.checkBlack;
     }
 
+    /**
+     * Metoda, která zjištuje, zda má zadaný hráč mat
+     * @param isWhite Barva hráče
+     * @return boolean True - má mat
+     */
     public boolean isMate(boolean isWhite) {
         return isWhite ? this.mateWhite : this.mateBlack;
     }
 
+    /**
+     * Metoda, která vrátí přesné znění aktuální notace
+     * @return String Notace tahu
+     */
     public String getCurrentNotation() {
         return this.currentNotation;
     }
