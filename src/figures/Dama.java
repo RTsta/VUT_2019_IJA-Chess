@@ -36,8 +36,16 @@ public class Dama extends AbstractFigure {
                 if (startCol != endCol) {
                     startCol += startCol < endCol ? 1 : -1;
                 }
+                if (startRow != endRow) {
+                    startRow += startRow < endRow ? 1 : -1;
+                }
+            } else {
+                startCol += startCol < endCol ? 1 : -1;
+                startRow += startRow < endRow ? 1 : -1;
             }
+            if (board.getField(startCol, startRow) == null) { return false; }
+            if(board.getField(startCol, startRow).get() != null && !(startCol == endCol && startRow == endRow)){ return false; }
         }
-            return finalMove(field, board, realMove);
+        return finalMove(field, board, realMove);
     }
 }
