@@ -25,6 +25,8 @@ public class Notation {
     private boolean checkBlack;
     private boolean mateBlack;
 
+    private String currentNotation;
+
     public Notation(String notation) {
         this.notArr = notation.trim().split("\n");
         this.moveCnt = 0;
@@ -51,12 +53,14 @@ public class Notation {
         this.mateWhite = false;
         this.checkBlack = false;
         this.mateBlack = false;
+
+        this.currentNotation = "";
     }
 
     public boolean getMove(Board board) {
         this.init();
         if (this.isEnd()) { return false; }
-        System.out.println(this.notArr[moveCnt]);
+        this.currentNotation = this.notArr[moveCnt];
 
         String notParts[] = this.notArr[this.moveCnt].split(" ");
         if (notParts.length != 3 || notParts[0].compareTo((this.moveCnt+1)+".") != 0) { return false; }
@@ -175,7 +179,6 @@ public class Notation {
                     Figure fig = board.getField(j,i).get();
                     if (fig == null) { continue; }
                     if (fig.getClass().getName().toLowerCase().compareTo("figures."+figureToString(figure)) == 0 && fig.isWhite() == isWhite) {
-                        System.out.println(fig.move(board.getField(col, row), board, false));
                         if (fig.move(board.getField(col, row), board, false)) {
                             if (isWhite) {
                                 this.srcColWhite = j;
@@ -278,5 +281,9 @@ public class Notation {
 
     public boolean isMate(boolean isWhite) {
         return isWhite ? this.mateWhite : this.mateBlack;
+    }
+
+    public String getCurrentNotation() {
+        return this.currentNotation;
     }
 }
