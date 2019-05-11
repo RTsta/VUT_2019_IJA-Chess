@@ -6,6 +6,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.geometry.VPos;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
@@ -59,10 +60,23 @@ public class ChessTab extends Tab {
             Button btn2 = new Button();
             btn2.setText("Undo");
 
-            HBox bottomNavigationButtons = new HBox(btn1, btn2);
-                VBox sideListBox = new VBox(sideListView, sideImportTextArea,bottomNavigationButtons);
+
+            Button btn3 = new Button();
+            btn3.setText("Redo");
+
+            HBox bottomNavigationButtons = new HBox(btn1, btn2, btn3);
+            bottomNavigationButtons.setAlignment(Pos.BOTTOM_RIGHT);
+            VBox sideListBox = new VBox(sideListView, sideImportTextArea,bottomNavigationButtons);
+
             btn1.setOnAction((ActionEvent event) -> {
                 sideListBox.getChildren().remove(sideImportTextArea);
+                bottomNavigationButtons.getChildren().remove(btn1);
+            });
+
+            btn2.setOnAction((ActionEvent) -> {
+                chessGame.undo();
+                //TODO vymazat poslední záznam v sideListView
+                displayGame();
             });
 
 

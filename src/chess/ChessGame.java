@@ -80,10 +80,9 @@ public class ChessGame implements Game {
     public void undo(){
         if(!this.stack.empty()){
             Move m = stack.pop();
-            m.getField().remove();
+            m.getToField().remove();
             m.getField().put(m.getFigure());
             if(m.getRemoved() != null){
-                m.getToField().remove();
                 m.getToField().put(m.getRemoved());
             }
 
@@ -100,23 +99,7 @@ public class ChessGame implements Game {
     * */
 
     private void testCheck(){
-        this.blackCheck = false;
-        this.whiteCheck = false;
-        for (int loopCol = 1; loopCol < this.board.getSize()+1;loopCol++){
-            for (int loopRow = 1; loopRow < this.board.getSize()+1;loopRow++){
-                Figure tmpFigure = this.board.getField(loopRow, loopRow).get();
-                        for (int moveLoopCol = 1 ; moveLoopCol < this.board.getSize()+1 ; moveLoopCol++){
-                            for (int moveLoopRow = 1; moveLoopRow < this.board.getSize()+1 ; moveLoopRow++){
-                                if (tmpFigure.move(this.board.getField(moveLoopCol,moveLoopRow),this.board,false)){
-                                    if (this.board.getField(moveLoopCol,moveLoopRow).get().getClass().getName().equals("figures.kral")){
-                                        if (tmpFigure.isWhite()) { this.whiteCheck = true; }
-                                        else {this.blackCheck = true;}
-                                    }
-                                }
-                            }
-                        }
-            }
-        }
+
     }
 
     private boolean isMate(){

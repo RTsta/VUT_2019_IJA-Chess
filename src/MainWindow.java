@@ -38,7 +38,7 @@ public class MainWindow extends Application {
         AnchorPane.setRightAnchor(addBtn,1.);
         AnchorPane.setTopAnchor(addBtn,1.);
 
-        primaryStage.setScene(new Scene(mainPane, 600, 400));
+        primaryStage.setScene(new Scene(mainPane, 620, 400));
         primaryStage.setResizable(false);
         primaryStage.show();
     }
