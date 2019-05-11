@@ -77,7 +77,7 @@ public class ChessGame implements Game {
         Figure f = field.get();
         boolean b = figure.move(field, this.board, true);
         if(b){
-            this.list.add((new Move(prevf, figure, f, field));
+            this.list.add(new Move(prevf, figure, f, field));
             this.listPos++;
             testCheck();
         }
