@@ -1,8 +1,7 @@
-import chess.ChessGame;
-import chess.Notation;
 import board.Board;
 import board.Field;
-import figures.Dama;
+import chess.ChessGame;
+import chess.Notation;
 import figures.Figure;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -43,6 +42,8 @@ public class ChessTab extends Tab {
     private boolean gameTouched;
 
     private int lapsCounter;
+
+    private boolean playPause;
 
 
     public ChessTab(String name){
@@ -99,6 +100,20 @@ public class ChessTab extends Tab {
                         //TODO vymazat poslední záznam v sideListView
                         displayGame();
                     });
+                    this.rldBtn.setOnAction((ActionEvent) ->{
+                        this.reload();
+                        displayGame();
+                    });
+                    this.playPauseBtn.setOnAction((ActionEvent) ->{
+                        this.playPause = !this.playPause;
+                        while (this.playPause && chessGame.getListPos() < chessGame.getSizeOfList()) {
+                            chessGame.redo();
+                            displayGame();
+                            try {
+                                Thread.sleep(1000);
+                            } catch (InterruptedException e) {}
+                        }
+                    });
                                                                                     //----------------------------------
             VBox rightChessBox = new VBox();                                        //----------------------------------
                 this.chessGrid = createNewChessGrid();
@@ -140,6 +155,8 @@ public class ChessTab extends Tab {
         gameTouched = false;
 
         lapsCounter = 1;
+
+        playPause = false;
     }
 
     /**
@@ -392,12 +409,18 @@ public class ChessTab extends Tab {
         Notation notation = new Notation(moves);
         while (!notation.isEnd()) {
             if (notation.getMove(chessGame.getBoard())) {
-                notationMove(notation,true);
-                notationMove(notation,false);
+                if (!notationMove(notation,true)) {
+                    return false;
+                }
+                if (!notationMove(notation,false)) {
+                    return false;
+                }
                 sideListView.getItems().add(notation.getCurrentNotation());
                 lapsCounter++;
             } else { return false; }
         }
+        this.reload();
+        displayGame();
         return true;
     }
 
@@ -405,18 +428,31 @@ public class ChessTab extends Tab {
      * Metoda provádějící pohyb dle zadané notace
      * @param notation Notace, podle které má být proveden tah
      * @param isWhite Barva hráče
+     * @return boolean True - vše proběhlo bez problému
      */
-    private void notationMove(Notation notation, boolean isWhite) {
-        chessGame.move(chessGame.getBoard().getField(notation.getSrcCol(isWhite), notation.getSrcRow(isWhite)).get(),chessGame.getBoard().getField(notation.getDecCol(isWhite),notation.getDesRow(isWhite)));
-        //if (notation.isTakeFigure(true)) {}
-        if (notation.isCheck(isWhite)) {
-            //System.out.println("Sach");
-            //TODO sach bila/cerna
+    private boolean notationMove(Notation notation, boolean isWhite) {
+        int numFig = chessGame.getNumberOfAliveFigures();
+        if (!chessGame.move(chessGame.getBoard().getField(notation.getSrcCol(isWhite), notation.getSrcRow(isWhite)).get(),chessGame.getBoard().getField(notation.getDecCol(isWhite),notation.getDesRow(isWhite)))) {
+            return false;
         }
-        if (notation.isMate(isWhite)) {
-            //System.out.println("Mat");
-            //TODO mat bila/cerna
+        if (notation.isTakeFigure(true) && numFig != chessGame.getNumberOfAliveFigures()-1) {
+            return false;
         }
-        displayGame();
+        if (chessGame.isCheck(isWhite) != notation.isCheck(isWhite)) {
+            return false;
+        }
+        if (chessGame.isMate(isWhite) != notation.isMate(isWhite)) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Metoda, která přetočí hru na začátek
+     */
+    private void reload() {
+        while (chessGame.getListPos() > 0) {
+            chessGame.undo();
+        }
     }
 }

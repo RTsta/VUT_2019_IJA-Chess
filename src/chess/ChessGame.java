@@ -9,7 +9,7 @@ import java.util.List;
 public class ChessGame implements Game {
 
     private Board board;
-    //private int numberOfAliveFigures;
+    private int numberOfAliveFigures;
     private boolean whitesTurn;
     private boolean whiteCheck; // bílý dává šach
     private boolean blackCheck; //černý dává šach
@@ -65,7 +65,7 @@ public class ChessGame implements Game {
         for(int i = 1; i <= board.getSize(); i++) {
             board.getField(i, 7).put(new Pesak(i, 7, false));
         }
-        //numberOfAliveFigures = 32;
+        this.numberOfAliveFigures = 32;
     }
 
     public Board getBoard(){
@@ -84,6 +84,9 @@ public class ChessGame implements Game {
         Figure f = field.get();
         boolean b = figure.move(field, this.board, true);
         if(b){
+            if (f != null) {
+                this.numberOfAliveFigures--;
+            }
             while (this.listPos < this.list.size()-1) {
                 this.list.remove(this.list.size()-1);
             }
@@ -104,6 +107,7 @@ public class ChessGame implements Game {
             m.getField().put(m.getFigure());
             if(m.getRemoved() != null){
                 m.getToField().put(m.getRemoved());
+                this.numberOfAliveFigures++;
             }
             this.listPos--;
             this.whitesTurn = !this.whitesTurn;
@@ -118,6 +122,9 @@ public class ChessGame implements Game {
     public void redo(){
         if (this.list.size() > 0 && this.listPos < this.list.size()-1){
             Move m = this.list.get(this.listPos+1);
+            if (m.getRemoved() != null) {
+                this.numberOfAliveFigures--;
+            }
             m.getField().remove();
             m.getToField().remove();
             m.getToField().put(m.getFigure());
@@ -159,8 +166,6 @@ public class ChessGame implements Game {
         if (kingW == null || kingB == null) {
             this.whiteMate = (kingW == null);
             this.blackMate = (kingB == null);
-            this.whiteCheck = (kingW == null);
-            this.blackCheck = (kingB == null);
             return;
         }
         for (int loopCol = 1; loopCol <= this.board.getSize(); loopCol++) {
@@ -219,6 +224,22 @@ public class ChessGame implements Game {
     }
 
     /**
+     * Metoda, která vrací pozici v listu
+     * @return int pozice
+     */
+    public int getListPos() {
+        return this.listPos;
+    }
+
+    /**
+     * Metoda vrátí počet položek v listu
+     * @return int počet položek
+     */
+    public int getSizeOfList() {
+        return this.list.size();
+    }
+
+    /**
      * Metoda na výměnu pešáka za zvolenou figurku
      * @param field Políčko, na kterém je pěšák
      * @param type Typ figurky, za kterou se bude pěšák měnit
@@ -244,6 +265,14 @@ public class ChessGame implements Game {
             default:
                 break;
         }
+    }
+
+    /**
+     * Metoda, která vrátí počet figurek ve hře
+     * @return int Počet figurek
+     */
+    public int getNumberOfAliveFigures() {
+        return this.numberOfAliveFigures;
     }
 
     private class Move{
