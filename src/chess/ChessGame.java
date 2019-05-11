@@ -71,7 +71,7 @@ public class ChessGame implements Game {
         boolean b = figure.move(field, this.board, true);
         if(b){
             this.stack.push(new Move(prevf, figure, f, field));
-            testCheck();
+            //testCheck();
         }
         return b;
     }
@@ -87,7 +87,7 @@ public class ChessGame implements Game {
             }
 
         }
-        testCheck();
+        //testCheck();
     }
 
     /*

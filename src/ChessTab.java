@@ -21,6 +21,9 @@ public class ChessTab extends Tab {
     private GridPane chessGrid;
     private ListView sideListView;
 
+    private Label checkLabel;
+    private Label turnsLabel;
+
 
     private int SIZE = 8;
     private String COLORB = "#7D7D7D";
@@ -39,59 +42,72 @@ public class ChessTab extends Tab {
 
         Board b = new Board(SIZE);
         this.chessGame = new ChessGame(b);
-        this.chessGrid = createNewChessGrid();
 
-            sideListView = new ListView();
-            sideListView.setCellFactory(TextFieldListCell.forListView());
-            sideListView.setEditable(false);
+        AnchorPane anchor = new AnchorPane();
+            VBox leftSideListBox = new VBox();                                          //----------------------------------
+                sideListView = new ListView();
+                sideListView.setCellFactory(TextFieldListCell.forListView());
+                sideListView.setEditable(false);
 
-            TextArea sideImportTextArea = new TextArea();
+                TextArea sideImportTextArea = new TextArea();
 
-            Button btn1 = new Button();
-            btn1.setText("Importovat tahy");
-            btn1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (!importMoves(sideImportTextArea.getText())) {
-                        // TODO error okno
-                    }
-                }
-            });
-            Button btn2 = new Button();
-            btn2.setText("Undo");
+                HBox bottomNavigationButtons = new HBox();
+                    Button btn1 = new Button();
+                    btn1.setText("Importovat tahy");
+                    btn1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                        @Override
+                        public void handle(MouseEvent event) {
+                            if (!importMoves(sideImportTextArea.getText())) {
+                                // TODO error okno
+                            }
+                        }
+                    });
 
+                    Button btn2 = new Button();
+                    btn2.setText("Undo");
 
-            Button btn3 = new Button();
-            btn3.setText("Redo");
+                    Button btn3 = new Button();
+                    btn3.setText("Redo");
 
-            HBox bottomNavigationButtons = new HBox(btn1, btn2, btn3);
-            bottomNavigationButtons.setAlignment(Pos.BOTTOM_RIGHT);
-            VBox sideListBox = new VBox(sideListView, sideImportTextArea,bottomNavigationButtons);
+                    bottomNavigationButtons.getChildren().addAll(btn1, btn2, btn3);
+                    bottomNavigationButtons.setAlignment(Pos.BOTTOM_RIGHT);
 
-            btn1.setOnAction((ActionEvent event) -> {
-                sideListBox.getChildren().remove(sideImportTextArea);
-                bottomNavigationButtons.getChildren().remove(btn1);
-            });
+                leftSideListBox.getChildren().addAll(sideListView, sideImportTextArea, bottomNavigationButtons);
 
-            btn2.setOnAction((ActionEvent) -> {
-                chessGame.undo();
-                //TODO vymazat poslední záznam v sideListView
-                displayGame();
-            });
+                    btn1.setOnAction((ActionEvent event) -> {
+                        leftSideListBox.getChildren().remove(sideImportTextArea);
+                        bottomNavigationButtons.getChildren().remove(btn1);
+                    });
+                    btn2.setOnAction((ActionEvent) -> {
+                        chessGame.undo();
+                        //TODO vymazat poslední záznam v sideListView
+                        displayGame();
+                    });
+                                                                                    //----------------------------------
+            VBox rightChessBox = new VBox();                                        //----------------------------------
+                this.chessGrid = createNewChessGrid();
+                HBox chessStatusBox = new HBox();
+                    this.checkLabel = new Label();
+                    this.checkLabel.setText("");
 
+                    this.turnsLabel = new Label();
+                    this.turnsLabel.setText("Táhne bílý");
+
+                    chessStatusBox.getChildren().addAll(checkLabel,turnsLabel);
+
+                rightChessBox.getChildren().addAll(this.chessGrid,chessStatusBox);
 
         // Anchor the controls
-        AnchorPane anchor = new AnchorPane();
-        anchor.getChildren().addAll(chessGrid, sideListBox);
+            anchor.getChildren().addAll(rightChessBox, leftSideListBox);
 
-        AnchorPane.setLeftAnchor(chessGrid,1.);
-        AnchorPane.setTopAnchor(chessGrid,1.);
-        AnchorPane.setBottomAnchor(chessGrid,1.);
+            AnchorPane.setLeftAnchor(rightChessBox,1.);
+            AnchorPane.setTopAnchor(rightChessBox,1.);
+            AnchorPane.setBottomAnchor(rightChessBox,1.);
 
-        AnchorPane.setBottomAnchor(sideListBox,1.);
-        AnchorPane.setRightAnchor(sideListBox,1.);
-        AnchorPane.setTopAnchor(sideListBox,1.);
-        AnchorPane.setLeftAnchor(sideListBox, 400.);
+            AnchorPane.setBottomAnchor(leftSideListBox,1.);
+            AnchorPane.setRightAnchor(leftSideListBox,1.);
+            AnchorPane.setTopAnchor(leftSideListBox,1.);
+            AnchorPane.setLeftAnchor(leftSideListBox, 400.);
 
         super.setContent(anchor);
         //super.setContent(chessGrid);
@@ -260,6 +276,9 @@ public class ChessTab extends Tab {
             }
 
         }
+
+        if (whitesTurn){ turnsLabel.setText("Táhne - bílý");}
+        else {turnsLabel.setText("Táhne černý");}
 
     }
 
