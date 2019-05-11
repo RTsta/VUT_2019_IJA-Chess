@@ -20,6 +20,12 @@ public class ChessTab extends Tab {
     private ChessGame chessGame;
     private GridPane chessGrid;
     private ListView sideListView;
+    private VBox leftSideListBox;
+    private TextArea sideImportTextArea;
+    private HBox topNavigationButtons;
+    private Button btn1;
+    private Button rldBtn;
+    private Button playPauseBtn;
 
     private Label checkLabel;
     private Label turnsLabel;
@@ -43,24 +49,16 @@ public class ChessTab extends Tab {
         this.chessGame = new ChessGame(b);
 
         AnchorPane anchor = new AnchorPane();
-            VBox leftSideListBox = new VBox();                                          //----------------------------------
+            this.leftSideListBox = new VBox();                                          //----------------------------------
                 sideListView = new ListView();
                 sideListView.setCellFactory(TextFieldListCell.forListView());
                 sideListView.setEditable(false);
 
-                TextArea sideImportTextArea = new TextArea();
+                this.sideImportTextArea = new TextArea();
 
-                HBox bottomNavigationButtons = new HBox();
-                    Button btn1 = new Button();
+                this.topNavigationButtons = new HBox();
+                    this.btn1 = new Button();
                     btn1.setText("Importovat tahy");
-                    btn1.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent event) {
-                            if (!importMoves(sideImportTextArea.getText())) {
-                                // TODO error okno
-                            }
-                        }
-                    });
 
                     Button btn2 = new Button();
                     btn2.setText("Undo");
@@ -68,14 +66,24 @@ public class ChessTab extends Tab {
                     Button btn3 = new Button();
                     btn3.setText("Redo");
 
-                    bottomNavigationButtons.getChildren().addAll(btn1, btn2, btn3);
-                    bottomNavigationButtons.setAlignment(Pos.BOTTOM_RIGHT);
+                    this.rldBtn = new Button();
+                    rldBtn.setText("RLD");
 
-                leftSideListBox.getChildren().addAll(sideListView, sideImportTextArea, bottomNavigationButtons);
+                    this.playPauseBtn = new Button();
+                    playPauseBtn.setText(">||");
+
+                    topNavigationButtons.getChildren().addAll(btn2, btn3, btn1);
+                    topNavigationButtons.setAlignment(Pos.BOTTOM_LEFT);
+
+                leftSideListBox.getChildren().addAll(topNavigationButtons, sideListView, sideImportTextArea);
 
                     btn1.setOnAction((ActionEvent event) -> {
                         leftSideListBox.getChildren().remove(sideImportTextArea);
-                        bottomNavigationButtons.getChildren().remove(btn1);
+                        topNavigationButtons.getChildren().remove(btn1);
+                        topNavigationButtons.getChildren().addAll(rldBtn, playPauseBtn);
+                        if (!importMoves(sideImportTextArea.getText())) {
+                            // TODO error okno
+                        }
                     });
                     btn2.setOnAction((ActionEvent) -> {
                         chessGame.undo();
@@ -308,6 +316,11 @@ public class ChessTab extends Tab {
      * @param id Políčka, na které bylo kliknuto ( id = "col" + "row")
      */
     private void gameMove(String id){
+        if (lapsCounter < 2){
+            leftSideListBox.getChildren().remove(sideImportTextArea);
+            topNavigationButtons.getChildren().remove(btn1);
+            topNavigationButtons.getChildren().addAll(rldBtn, playPauseBtn);
+        }
         if (evenClick) {
             if (chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get()!= null && chessGame.isWhitesTurn() == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
                 srcClick = id;
