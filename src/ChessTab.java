@@ -33,7 +33,6 @@ public class ChessTab extends Tab {
     private String destClick;
     private String lastWhitesMove;
 
-    private Boolean whitesTurn;
     private int lapsCounter;
 
 
@@ -83,6 +82,11 @@ public class ChessTab extends Tab {
                         //TODO vymazat poslední záznam v sideListView
                         displayGame();
                     });
+                    btn3.setOnAction((ActionEvent) -> {
+                        chessGame.redo();
+                        //TODO vymazat poslední záznam v sideListView
+                        displayGame();
+                    });
                                                                                     //----------------------------------
             VBox rightChessBox = new VBox();                                        //----------------------------------
                 this.chessGrid = createNewChessGrid();
@@ -119,7 +123,6 @@ public class ChessTab extends Tab {
         destClick = "";
         lastWhitesMove = "";
 
-        whitesTurn = true;
         lapsCounter = 1;
     }
 
@@ -277,14 +280,14 @@ public class ChessTab extends Tab {
 
         }
 
-        if (whitesTurn){ turnsLabel.setText("Táhne - bílý");}
-        else {turnsLabel.setText("Táhne černý");}
+        if (chessGame.isWhitesTurn()){ turnsLabel.setText("Táhne - bílý");}
+        else {turnsLabel.setText("Táhne - černý");}
 
     }
 
     private void gameMove(String id){
         if (evenClick) {
-            if (chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get()!= null && whitesTurn == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
+            if (chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get()!= null && chessGame.isWhitesTurn() == chessGame.getBoard().getField(parseColFromID(id), parseRowFromID(id)).get().isWhite()) {
                 srcClick = id;
                 evenClick = false;
             }
@@ -297,7 +300,7 @@ public class ChessTab extends Tab {
                 int d_row = parseRowFromID(destClick);
                 Boolean a = chessGame.move(chessGame.getBoard().getField(s_col, s_row).get(), chessGame.getBoard().getField(d_col,d_row));
                 if (a) {
-                    if (whitesTurn){
+                    if (chessGame.isWhitesTurn()){
                         lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row;
                     }
                     else {
@@ -305,7 +308,7 @@ public class ChessTab extends Tab {
                         lastWhitesMove = "";
                         lapsCounter++;
                     }
-                    whitesTurn = !whitesTurn;
+                    chessGame.setWhitesTurn(!chessGame.isWhitesTurn());
                     displayGame();
                 }
             }

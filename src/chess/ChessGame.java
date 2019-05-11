@@ -36,6 +36,7 @@ public class ChessGame implements Game {
         this.board = board;
         this.list = new ArrayList<Move>();
         this.listPos = -1;
+        this.whitesTurn = true;
 
         /* put bílých figurek*/
         board.getField(1,1).put(new Vez(1,1,true));
@@ -176,6 +177,10 @@ public class ChessGame implements Game {
 
     public boolean isMate(boolean isWhite){
         return isWhite ? this.whiteMate : this.blackMate;
+    }
+
+    public void setWhitesTurn(boolean isWhite){
+        this.whitesTurn = isWhite;
     }
 
     public boolean isWhitesTurn() {
