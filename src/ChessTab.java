@@ -62,7 +62,16 @@ public class ChessTab extends Tab {
                 sideListView = new ListView();
                 sideListView.setCellFactory(TextFieldListCell.forListView());
                 sideListView.setEditable(false);
-
+                sideListView.setOnMousePressed(new EventHandler<MouseEvent>() {
+                    @Override
+                    public void handle(MouseEvent event) {
+                        //TODO
+                        //cislo polozky na kterou se kliklo -> sideListView.getSelectionModel().getSelectedIndex()
+                        int numbOfSelectedItem = sideListView.getSelectionModel().getSelectedIndex();
+                        System.out.println(numbOfSelectedItem);
+                        sideListView.getSelectionModel().select(numbOfSelectedItem-1);
+                    }
+                });
                 this.sideImportTextArea = new TextArea();
 
                 this.topNavigationButtons = new HBox();
@@ -117,12 +126,12 @@ public class ChessTab extends Tab {
                     });
                     btn2.setOnAction((ActionEvent) -> {
                         chessGame.undo();
-                        //TODO vymazat poslední záznam v sideListView
+                        sideListView.getSelectionModel().select(chessGame.getListPos()/2);
                         displayGame();
                     });
                     btn3.setOnAction((ActionEvent) -> {
                         chessGame.redo();
-                        //TODO vymazat poslední záznam v sideListView
+                        sideListView.getSelectionModel().select(chessGame.getListPos()/2);
                         displayGame();
                     });
                     this.rldBtn.setOnAction((ActionEvent) ->{
@@ -365,6 +374,8 @@ public class ChessTab extends Tab {
      * @param id Políčka, na které bylo kliknuto ( id = "col" + "row")
      */
     private void gameMove(String id){
+        if (chessGame.isMate(true) || chessGame.isMate(false)){ return; }
+
         if (gameTouched == false){
             leftSideListBox.getChildren().remove(sideImportTextArea);
             topNavigationButtons.getChildren().remove(btn1);
@@ -406,6 +417,26 @@ public class ChessTab extends Tab {
             srcClick = "";
             destClick = "";
             evenClick = true;
+        }
+
+        if (chessGame.isMate(true) || chessGame.isMate(false)){
+            Stage winWindow = new Stage();
+            AnchorPane winPane = new AnchorPane();
+            Label winMessage = new Label("Vyhrál hráč na "+ (chessGame.isMate(true) ? "bílé": "černé"));
+            Button okBtn = new Button("OK");
+            okBtn.setOnAction((ActionEvent _event) -> {
+                winWindow.close();
+            });
+            winPane.getChildren().addAll(winMessage,okBtn);
+            AnchorPane.setBottomAnchor(okBtn,10.);
+            AnchorPane.setRightAnchor(okBtn,10.);
+            AnchorPane.setTopAnchor(winMessage, 20.);
+            winMessage.setAlignment(Pos.CENTER);
+            okBtn.setAlignment(Pos.BOTTOM_RIGHT);
+            Scene errorScene = new Scene(winPane,300,150);
+            winWindow.setScene(errorScene);
+            winWindow.setResizable(false);
+            winWindow.show();
         }
     }
 
@@ -450,6 +481,8 @@ public class ChessTab extends Tab {
         displayGame();
         return true;
     }
+
+    private boolean isEndOfGame(){return false;}
 
     /**
      * Metoda provádějící pohyb dle zadané notace
