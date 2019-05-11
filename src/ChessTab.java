@@ -1,22 +1,16 @@
 import board.Board;
 import board.Field;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
-import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-
-import java.util.Dictionary;
 
 public class ChessTab extends Tab {
 
@@ -51,6 +45,14 @@ public class ChessTab extends Tab {
 
             Button btn1 = new Button();
             btn1.setText("Importovat tahy");
+            btn1.setOnMouseClicked(new EventHandler<MouseEvent>() {
+                @Override
+                public void handle(MouseEvent event) {
+                    if (!importMoves(sideImportTextArea.getText())) {
+                        // TODO error okno
+                    }
+                }
+            });
             Button btn2 = new Button();
             btn2.setText("Undo");
 
@@ -281,4 +283,29 @@ public class ChessTab extends Tab {
         return Integer.parseInt(id)%10;
     }
 
+    private boolean importMoves(String moves) {
+        Notation notation = new Notation(moves);
+        while (!notation.isEnd()) {
+            if (notation.getMove(chessGame.getBoard())) {
+                notationMove(notation,true);
+                notationMove(notation,false);
+                sideListView.getItems().add(notation.getCurrentNotation());
+                lapsCounter++;
+            } else { return false; }
+        }
+        return true;
+    }
+
+    private void notationMove(Notation notation, boolean isWhite) {
+        chessGame.move(chessGame.getBoard().getField(notation.getSrcCol(isWhite), notation.getSrcRow(isWhite)).get(),chessGame.getBoard().getField(notation.getDecCol(isWhite),notation.getDesRow(isWhite)));
+        //if (notation.isTakeFigure(true)) {}
+        if (notation.isCheck(isWhite)) {
+            //System.out.println("Sach");
+            //TODO sach bila/cerna
+        }
+        if (notation.isMate(isWhite)) {
+            //System.out.println("Mat");
+            //TODO mat bila/cerna
+        }
+    }
 }
