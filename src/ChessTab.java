@@ -2,6 +2,7 @@ import chess.ChessGame;
 import chess.Notation;
 import board.Board;
 import board.Field;
+import figures.Figure;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.HPos;
@@ -339,6 +340,12 @@ public class ChessTab extends Tab {
                 int d_row = parseRowFromID(destClick);
                 Boolean a = chessGame.move(chessGame.getBoard().getField(s_col, s_row).get(), chessGame.getBoard().getField(d_col,d_row));
                 if (a) {
+                    Figure tmpFig = chessGame.getBoard().getField(s_col,s_row).get();
+                    if (tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
+                        if ((tmpFig.isWhite() && tmpFig.getRow() == 8) || (!tmpFig.isWhite() && tmpFig.getRow() == 1)) {
+                            chessGame.changePawn(chessGame.getBoard().getField(s_col,s_row),'D');
+                        }
+                    }
                     if (chessGame.isWhitesTurn()){
                         lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row;
                     }

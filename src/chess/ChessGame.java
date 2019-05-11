@@ -218,6 +218,34 @@ public class ChessGame implements Game {
         return this.whitesTurn;
     }
 
+    /**
+     * Metoda na výměnu pešáka za zvolenou figurku
+     * @param field Políčko, na kterém je pěšák
+     * @param type Typ figurky, za kterou se bude pěšák měnit
+     */
+    public void changePawn(Field field, char type) {
+        boolean isWhite = field.get().isWhite();
+        int col = field.get().getCol();
+        int row = field.get().getRow();
+        field.remove();
+        switch (type) {
+            case 'D':
+                field.put(new Dama(col,row,isWhite));
+                break;
+            case 'J':
+                field.put(new Kun(col,row,isWhite));
+                break;
+            case 'S':
+                field.put(new Strelec(col,row,isWhite));
+                break;
+            case 'V':
+                field.put(new Vez(col,row,isWhite));
+                break;
+            default:
+                break;
+        }
+    }
+
     private class Move{
 
         private Field ffrom;
@@ -263,35 +291,6 @@ public class ChessGame implements Game {
         public Field getToField(){
             return this.tof;
         }
-
-        /**
-         * Metoda na výměnu pešáka za zvolenou figurku
-         * @param field Políčko, na kterém je pěšák
-         * @param type Typ figurky, za kterou se bude pěšák měnit
-         */
-        public void changePawn(Field field, char type) {
-            boolean isWhite = field.get().isWhite();
-            int col = field.get().getCol();
-            int row = field.get().getRow();
-            field.remove();
-            switch (type) {
-                case 'D':
-                    field.put(new Dama(col,row,isWhite));
-                    break;
-                case 'J':
-                    field.put(new Kun(col,row,isWhite));
-                    break;
-                case 'S':
-                    field.put(new Strelec(col,row,isWhite));
-                    break;
-                case 'V':
-                    field.put(new Vez(col,row,isWhite));
-                    break;
-                default:
-                    break;
-            }
-        }
-
     }
 }
 
