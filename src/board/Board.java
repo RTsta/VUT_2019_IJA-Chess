@@ -11,6 +11,7 @@ package board;
 public class Board {
     private BoardField[][] playboard;
     private int size;
+    //private  Game game;
     /*
     |14|24|34|44|
     |13|23|33|43|
