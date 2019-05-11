@@ -37,6 +37,21 @@ public abstract class AbstractFigure implements Figure{
         this.row = row;
     }
 
+    protected boolean finalMove(Field field, Board board, boolean realMove) {
+        if (realMove) {
+            /*odstranění cizího hráče*/
+            if (field.get() != null) {
+                if (field.get().isWhite() != this.isWhite) {
+                    field.remove();
+                } else {
+                    return false;
+                }
+            }
+            this.reposition(field, board);
+        }
+        return true;
+    }
+
     /*přesun políčka na požadovanou pozici*/
     protected void reposition(Field field, Board board){
         board.getField(this.col, this.row).remove();

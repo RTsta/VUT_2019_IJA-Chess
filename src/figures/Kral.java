@@ -45,20 +45,6 @@ public class Kral extends AbstractFigure {
             return false;
         }
 
-        if (realMove) {
-            /*odstranění cizího hráče*/
-            if (field.get() != null) {
-                if (field.get().isWhite() != this.isWhite) {
-                    field.remove();
-                } else {
-                    return false;
-                }
-            }
-
-            this.reposition(field, board);
-        }
-        return true;
-
-
+        return finalMove(field, board, realMove);
     }
 }
