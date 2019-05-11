@@ -97,6 +97,9 @@ public class ChessTab extends Tab {
                     this.turnsLabel = new Label();
                     this.turnsLabel.setText("Táhne bílý");
 
+                    this.turnsLabel.setAlignment(Pos.BOTTOM_LEFT);
+                    checkLabel.setAlignment(Pos.BOTTOM_RIGHT);
+
                     chessStatusBox.getChildren().addAll(checkLabel,turnsLabel);
 
                 rightChessBox.getChildren().addAll(this.chessGrid,chessStatusBox);
@@ -282,6 +285,12 @@ public class ChessTab extends Tab {
 
         if (chessGame.isWhitesTurn()){ turnsLabel.setText("Táhne - bílý");}
         else {turnsLabel.setText("Táhne - černý");}
+
+        checkLabel.setText("ŠACH\n");
+        if (chessGame.isCheck(true)){checkLabel.setText(checkLabel.getText()+"- bílý\n");}
+        if (chessGame.isCheck(false)){checkLabel.setText(checkLabel.getText()+"- cerny\n");}
+
+        if (!(chessGame.isCheck(true) || chessGame.isCheck(false))){checkLabel.setText("");}
 
     }
 
