@@ -1,3 +1,10 @@
+/**
+ * Rozhraní k polím, které lze umístit na hrací desku.
+ * @author  Petr Hemza
+ * @author Arthur Nácar
+ * @version 1.0
+ * @since   2019-04-25
+ */
 package board;
 
 import figures.Figure;

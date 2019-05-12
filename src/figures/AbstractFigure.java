@@ -1,3 +1,10 @@
+/**
+ * Abstraktní třída, která zapouzdřuje metody společné pro všechny figurky. Implementuje interface Figure.
+ * @author  Petr Hemza
+ * @author Arthur Nácar
+ * @version 1.0
+ * @since   2019-04-25
+ */
 package figures;
 import board.Board;
 import board.BoardField;

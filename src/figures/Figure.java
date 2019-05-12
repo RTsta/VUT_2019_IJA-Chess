@@ -1,3 +1,10 @@
+/**
+ * Rozhraní reprezentuje jeden kámen (figuru). Kámen může nabývat dvou barev - bílá nebo černá.
+ * @author  Petr Hemza
+ * @author Arthur Nácar
+ * @version 1.0
+ * @since   2019-04-25
+ */
 package figures;
 
 import board.Board;

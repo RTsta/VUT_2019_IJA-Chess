@@ -1,6 +1,14 @@
+/**
+ * Třída reprezentující hrací desku. Deska má velikost (rozměr) N a je tvořena maticí N x N polí.
+ * Pole jsou umístěna na řádcích a sloupcích, které jsou číslovány od 1 do N. Pole jsou identifikována dvojici (c, r),
+ * kde c je číslo sloupce a r je číslo řádku. Pozice políčka (1,1) je vlevo dole, pozice políčka (8,1) je vpravo dole.
+ * Na pole lze vkládat a odebírat kameny (figury), viz Disk.
+ * @author  Petr Hemza
+ * @author Arthur Nácar
+ * @version 1.0
+ * @since   2019-04-25
+ */
 package board;
-
-
 import chess.Game;
 
 /**

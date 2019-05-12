@@ -1,3 +1,10 @@
+/**
+ *
+ * @author  Petr Hemza
+ * @author Arthur Nácar
+ * @version 1.0
+ * @since   2019-04-25
+ */
 import board.Board;
 import board.Field;
 import chess.ChessGame;
