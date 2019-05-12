@@ -138,6 +138,8 @@ public class ChessTab extends Tab {
                     this.rldBtn.setOnAction((ActionEvent) ->{
                         this.reload();
                         displayGame();
+                        //TODO tady dokážu zobrazit všechny položky, které jsou v bočním panelu zapasné
+                        System.out.println(sideListView.itemsProperty().getValue().toString());
                     });
                     this.playBtn.setOnAction((ActionEvent) ->{
                         this.playPause = true;
