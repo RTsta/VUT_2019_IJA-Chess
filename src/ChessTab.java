@@ -64,6 +64,8 @@ public class ChessTab extends Tab {
 
     private boolean playPause;
 
+    private char changeOfPawn;
+
 
     public ChessTab(String name){
         super();
@@ -278,6 +280,8 @@ public class ChessTab extends Tab {
         lapsCounter = 1;
 
         playPause = false;
+
+        changeOfPawn = '-';
     }
 
     /**
@@ -482,6 +486,7 @@ public class ChessTab extends Tab {
                 Boolean a = chessGame.move(chessGame.getBoard().getField(s_col, s_row).get(), chessGame.getBoard().getField(d_col,d_row));
                 if (a) {
                     int pocetPostavicekVeHrePoTahu = chessGame.getNumberOfAliveFigures();
+                    changeOfPawn = '-';
                     Figure tmpFig = chessGame.getBoard().getField(d_col,d_row).get();
                     if (tmpFig != null && tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
                         if ((tmpFig.isWhite() && tmpFig.getRow() == 8) || (!tmpFig.isWhite() && tmpFig.getRow() == 1)){
@@ -496,24 +501,28 @@ public class ChessTab extends Tab {
                             damaBtn.setOnAction((ActionEvent _event) -> {
                                 chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'D');
                                 winWindow.close();
+                                changeOfPawn = 'D';
                                 displayGame();
                             });
                             Button strelecBtn = new Button("Střelec");
                             strelecBtn.setOnAction((ActionEvent _event) -> {
                                 chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'S');
                                 winWindow.close();
+                                changeOfPawn = 'S';
                                 displayGame();
                             });
                             Button jezdecBtn = new Button("Jezdec");
                             jezdecBtn.setOnAction((ActionEvent _event) -> {
                                 chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'J');
                                 winWindow.close();
+                                changeOfPawn = 'J';
                                 displayGame();
                             });
                             Button vezBtn = new Button("Věž");
                             vezBtn.setOnAction((ActionEvent _event) -> {
                                 chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'V');
                                 winWindow.close();
+                                changeOfPawn = 'V';
                                 displayGame();
                             });
 
@@ -531,10 +540,10 @@ public class ChessTab extends Tab {
                         sideListView.getItems().remove(sideListView.getItems().size()-1);
                     }
                     if (chessGame.isWhitesTurn()){
-                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x") + ((char) (d_col + 'a' - 1)) + d_row;
+                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x") + ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn + (chessGame.isMate(true) ? "#" : (chessGame.isCheck(true) ? "+" : "")));
                     }
                     else {
-                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x")+ ((char) (d_col + 'a' - 1)) + d_row);
+                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x")+ ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn) + (chessGame.isMate(false) ? "#" : (chessGame.isCheck(false) ? "+" : "")));
                         lastWhitesMove = "";
                         lapsCounter++;
                     }
