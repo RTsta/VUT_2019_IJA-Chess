@@ -81,11 +81,7 @@ public class ChessTab extends Tab {
                 sideListView.setOnMousePressed(new EventHandler<MouseEvent>() {
                     @Override
                     public void handle(MouseEvent event) {
-                        //TODO
-                        //cislo polozky na kterou se kliklo -> sideListView.getSelectionModel().getSelectedIndex()
-                        int numbOfSelectedItem = sideListView.getSelectionModel().getSelectedIndex();
-                        System.out.println(numbOfSelectedItem);
-                        sideListView.getSelectionModel().select(numbOfSelectedItem-1);
+
                     }
                 });
                 this.sideImportTextArea = new TextArea();
@@ -119,7 +115,6 @@ public class ChessTab extends Tab {
                         String a = sideListView.itemsProperty().getValue().toString();
                         a = a.replace(", ","\n");
                         a = a.substring(1,a.length()-1);
-                        System.out.println(a);
 
                         Stage exportWindow = new Stage();
                         exportWindow.setTitle("Export");
@@ -149,7 +144,6 @@ public class ChessTab extends Tab {
                         leftSideListBox.getChildren().add(exportBtn);
                         gameTouched = true;
                         if (!importMoves(sideImportTextArea.getText())) {
-                            // TODO error okno
                             Stage errorWindow = new Stage();
                             errorWindow.setTitle("Chyba");
                             AnchorPane errorPane = new AnchorPane();
@@ -183,8 +177,6 @@ public class ChessTab extends Tab {
                     this.rldBtn.setOnAction((ActionEvent) ->{
                         this.reload();
                         displayGame();
-                        //TODO tady dokážu zobrazit všechny položky, které jsou v bočním panelu zapasné
-                        System.out.println(sideListView.itemsProperty().getValue().toString());
                     });
                     this.playBtn.setOnAction((ActionEvent) ->{
                         this.playPause = true;
@@ -465,6 +457,18 @@ public class ChessTab extends Tab {
     private void gameMove(String id){
         if (chessGame.isMate(true) || chessGame.isMate(false)){ return; }
 
+        while ((chessGame.getListPos()+1)/2 < sideListView.getItems().size()) {
+            if (!chessGame.isWhitesTurn()) {
+                String list = sideListView.itemsProperty().getValue().toString();
+                list = list.replace(", ","\n");
+                list = list.substring(1,list.length()-1);
+                String items[] = list.split("\n");
+                lastWhitesMove = items[items.length-1].split(" ")[1];
+            }
+            sideListView.getItems().remove(sideListView.getItems().size()-1);
+            lapsCounter--;
+        }
+
         if (gameTouched == false){
             leftSideListBox.getChildren().remove(sideImportTextArea);
             topNavigationButtons.getChildren().remove(btn1);
@@ -543,12 +547,10 @@ public class ChessTab extends Tab {
                     }
                     if (chessGame.isWhitesTurn()){
                         String q1 = (chessGame.isMate(false) ? "#" : (chessGame.isCheck(false) ? "+" : ""));
-                        System.out.println("white "+changeOfPawn);
                         lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x") + ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn)+q1;
                     }
                     else {
                         String q1 = (chessGame.isMate(true) ? "#" : (chessGame.isCheck(true) ? "+" : ""));
-                        System.out.println("black "+changeOfPawn);
                         sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x")+ ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn) + q1);
                         lastWhitesMove = "";
                         lapsCounter++;

@@ -10,8 +10,6 @@ package figures;
 import board.Board;
 import board.Field;
 
-//TODO pokud pěšec dojde na konec šachovnice, může si vybrat v co se změní
-
 public class Pesak extends AbstractFigure{
 
     private boolean beenMoved;
