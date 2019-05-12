@@ -182,9 +182,9 @@ public class ChessTab extends Tab {
                         this.playPause = true;
                         while (this.playPause && chessGame.getListPos() < chessGame.getSizeOfList()-1) {
                             chessGame.redo();
-                            try {
-                                TimeUnit.SECONDS.sleep(2);
-                            } catch (InterruptedException e) {}
+                            //try {
+                            //    TimeUnit.SECONDS.sleep(2);
+                            //} catch (InterruptedException e) {}
                         }
                     });
 
