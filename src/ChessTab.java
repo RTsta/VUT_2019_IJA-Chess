@@ -72,7 +72,7 @@ public class ChessTab extends Tab {
         this.chessGame = new ChessGame(b);
 
         AnchorPane anchor = new AnchorPane();
-            this.leftSideListBox = new VBox();                                          //----------------------------------
+            this.leftSideListBox = new VBox();//----------------------------------
                 sideListView = new ListView();
                 sideListView.setCellFactory(TextFieldListCell.forListView());
                 sideListView.setEditable(false);
@@ -199,8 +199,45 @@ public class ChessTab extends Tab {
 
                     });
                                                                                     //----------------------------------
-            VBox rightChessBox = new VBox();                                        //----------------------------------
-                this.chessGrid = createNewChessGrid();
+            VBox rightChessBox = new VBox();
+                HBox chessWithNumber = new HBox();//----------------------------------
+                    this.chessGrid = createNewChessGrid();
+                    chessWithNumber.getChildren().add(this.chessGrid);
+                    GridPane rowNumbers = new GridPane();
+                    for (int i = 0; i < chessGame.getBoard().getSize()-1;i++){
+                        StackPane square = new StackPane();
+                        Label number = new Label((i+1)+"");
+                        number.setAlignment(Pos.CENTER);
+                        square.getChildren().add(number);
+                        rowNumbers.add(square,0,i);
+                    }
+                    chessWithNumber.getChildren().add(rowNumbers);
+                    //spodní panel s písmeny
+
+                HBox colAlphabet = new HBox();
+                    GridPane colNumbers = new GridPane();
+                    for (int i = 0; i < chessGame.getBoard().getSize()-1;i++){
+                        StackPane square = new StackPane();
+                        Label number = new Label("a");
+                        number.setAlignment(Pos.CENTER);
+                        square.getChildren().add(number);
+                        square.setMinSize(50,20);
+                        number.setAlignment(Pos.CENTER);
+
+                        String color;
+                        if (i % 2 == 0) {
+                            color = "red";
+                        } else {
+                            color = "blue";
+                        }
+                        square.setStyle("-fx-background-color: "+color+";");
+
+                        colNumbers.add(square,i,0);
+                    }
+
+                    colAlphabet.getChildren().add(colNumbers);
+        colAlphabet.setAlignment(Pos.CENTER);
+
                 HBox chessStatusBox = new HBox();
                     this.checkLabel = new Label();
                     this.checkLabel.setText("");
@@ -213,7 +250,7 @@ public class ChessTab extends Tab {
 
                     chessStatusBox.getChildren().addAll(checkLabel,turnsLabel);
 
-                rightChessBox.getChildren().addAll(this.chessGrid,chessStatusBox);
+                rightChessBox.getChildren().addAll(chessWithNumber,colAlphabet,chessStatusBox);
 
         // Anchor the controls
             anchor.getChildren().addAll(rightChessBox, leftSideListBox);
