@@ -2,7 +2,10 @@
 <project name = "Chess">
     <target name = "compile">
         <mkdir dir="build" />
-        <delete dir="dest" />
+        <mkdir dir="dest" />
+        <copy todir="build">
+            <fileset dir="lib/"/>
+        </copy>
         <javac srcdir="src/" destdir="build/" />
         <jar destfile="dest/ija-app.jar" basedir="build/">
             <manifest>
