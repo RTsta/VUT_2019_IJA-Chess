@@ -106,6 +106,7 @@ public class ChessTab extends Tab {
                         if (!importMoves(sideImportTextArea.getText())) {
                             // TODO error okno
                             Stage errorWindow = new Stage();
+                            errorWindow.setTitle("Chyba");
                             AnchorPane errorPane = new AnchorPane();
                             Label errorMessage = new Label("Neplatný formát notace");
                             Button okBtn = new Button("OK");
@@ -398,8 +399,47 @@ public class ChessTab extends Tab {
                 if (a) {
                     Figure tmpFig = chessGame.getBoard().getField(d_col,d_row).get();
                     if (tmpFig != null && tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
-                        if ((tmpFig.isWhite() && tmpFig.getRow() == 8) || (!tmpFig.isWhite() && tmpFig.getRow() == 1)) {
-                            chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'D');
+                        if ((tmpFig.isWhite() && tmpFig.getRow() == 8) || (!tmpFig.isWhite() && tmpFig.getRow() == 1)){
+                            Stage winWindow = new Stage();
+                            winWindow.setTitle("Vyber postavičku");
+                            VBox vbox = new VBox();
+                            HBox buttonPane = new HBox();
+                            Label winMessage = new Label("Vyber si figurku");
+                            vbox.getChildren().addAll(winMessage, buttonPane);
+                            //strelec, jezdec, vez,
+                            Button damaBtn = new Button("Dáma");
+                            damaBtn.setOnAction((ActionEvent _event) -> {
+                                chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'D');
+                                winWindow.close();
+                                displayGame();
+                            });
+                            Button strelecBtn = new Button("Střelec");
+                            strelecBtn.setOnAction((ActionEvent _event) -> {
+                                chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'S');
+                                winWindow.close();
+                                displayGame();
+                            });
+                            Button jezdecBtn = new Button("Jezdec");
+                            jezdecBtn.setOnAction((ActionEvent _event) -> {
+                                chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'J');
+                                winWindow.close();
+                                displayGame();
+                            });
+                            Button vezBtn = new Button("Věž");
+                            vezBtn.setOnAction((ActionEvent _event) -> {
+                                chessGame.changePawn(chessGame.getBoard().getField(d_col,d_row),'V');
+                                winWindow.close();
+                                displayGame();
+                            });
+
+                            buttonPane.getChildren().addAll(damaBtn,strelecBtn,jezdecBtn,vezBtn);
+
+                            winMessage.setAlignment(Pos.CENTER);
+                            buttonPane.setAlignment(Pos.CENTER);
+                            Scene errorScene = new Scene(vbox,300,150);
+                            winWindow.setScene(errorScene);
+                            winWindow.setResizable(false);
+                            winWindow.show();
                         }
                     }
                     if (chessGame.isWhitesTurn()){
@@ -421,6 +461,7 @@ public class ChessTab extends Tab {
 
         if (chessGame.isMate(true) || chessGame.isMate(false)){
             Stage winWindow = new Stage();
+            winWindow.setTitle("Vyhrál jsi!");
             AnchorPane winPane = new AnchorPane();
             Label winMessage = new Label("Vyhrál hráč na "+ (chessGame.isMate(true) ? "bílé": "černé"));
             Button okBtn = new Button("OK");
