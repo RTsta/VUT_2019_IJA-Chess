@@ -1,10 +1,12 @@
 <?xml version = "1.0"?>
 <project name = "Chess">
     <target name = "compile">
+        <mkdir dir="build" />
+        <delete dir="dest" />
         <javac srcdir="src/" destdir="build/" />
         <jar destfile="dest/ija-app.jar" basedir="build/">
             <manifest>
-                <attribute name="Main-Class" value="general.Main" />
+                <attribute name="Main-Class" value="MainWindow" />
             </manifest>
         </jar>
     </target>
