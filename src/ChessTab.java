@@ -451,6 +451,9 @@ public class ChessTab extends Tab {
                             winWindow.show();
                         }
                     }
+                    while (chessGame.getListPos()/2 < sideListView.getItems().size()) {
+                        sideListView.getItems().remove(sideListView.getItems().size()-1);
+                    }
                     if (chessGame.isWhitesTurn()){
                         lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row;
                     }
