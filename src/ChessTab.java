@@ -203,44 +203,40 @@ public class ChessTab extends Tab {
                                                                                     //----------------------------------
             VBox rightChessBox = new VBox();
                 HBox chessWithNumber = new HBox();//----------------------------------
-                    this.chessGrid = createNewChessGrid();
-                    chessWithNumber.getChildren().add(this.chessGrid);
                     GridPane rowNumbers = new GridPane();
-                    for (int i = 0; i < chessGame.getBoard().getSize()-1;i++){
+                    for (int i = 0; i < chessGame.getBoard().getSize();i++){
                         StackPane square = new StackPane();
-                        Label number = new Label((i+1)+"");
+                        Label number = new Label((8-i)+"");
                         number.setAlignment(Pos.CENTER);
+                        square.setMinSize(20,45);
                         square.getChildren().add(number);
                         rowNumbers.add(square,0,i);
                     }
+                    rowNumbers.setPadding(new Insets(25, 0, 0, 10));
                     chessWithNumber.getChildren().add(rowNumbers);
+                    this.chessGrid = createNewChessGrid();
+                    chessWithNumber.getChildren().add(this.chessGrid);
                     //spodní panel s písmeny
 
                 HBox colAlphabet = new HBox();
                     GridPane colNumbers = new GridPane();
-                    for (int i = 0; i < chessGame.getBoard().getSize()-1;i++){
+                    for (int i = 0; i < chessGame.getBoard().getSize();i++){
                         StackPane square = new StackPane();
-                        Label number = new Label("a");
+                        int a ='A'+i;
+                        char labelChar = (char) a;
+                        Label number = new Label(labelChar+"");
                         number.setAlignment(Pos.CENTER);
                         square.getChildren().add(number);
-                        square.setMinSize(50,20);
+                        square.setMinSize(45,20);
                         number.setAlignment(Pos.CENTER);
-
-                        String color;
-                        if (i % 2 == 0) {
-                            color = "red";
-                        } else {
-                            color = "blue";
-                        }
-                        square.setStyle("-fx-background-color: "+color+";");
-
                         colNumbers.add(square,i,0);
-                    }
 
+                    }
+                    colNumbers.setPadding(new Insets(0,0,0,30));
                     colAlphabet.getChildren().add(colNumbers);
-        colAlphabet.setAlignment(Pos.CENTER);
 
                 HBox chessStatusBox = new HBox();
+
                     this.checkLabel = new Label();
                     this.checkLabel.setText("");
 
@@ -249,8 +245,14 @@ public class ChessTab extends Tab {
 
                     this.turnsLabel.setAlignment(Pos.BOTTOM_LEFT);
                     checkLabel.setAlignment(Pos.BOTTOM_RIGHT);
-
-                    chessStatusBox.getChildren().addAll(checkLabel,turnsLabel);
+                    turnsLabel.setPadding(new Insets(0,100,0,10));
+                    checkLabel.setPadding(new Insets(0,10,0,100));
+                    StackPane text1box = new StackPane(turnsLabel);
+                    StackPane text2box = new StackPane(checkLabel);
+                chessStatusBox.getChildren().addAll(text1box,text2box);
+                text1box.setAlignment(Pos.CENTER_LEFT);
+                text2box.setAlignment(Pos.CENTER_RIGHT);
+                chessStatusBox.setMinHeight(40);
 
                 rightChessBox.getChildren().addAll(chessWithNumber,colAlphabet,chessStatusBox);
 
@@ -338,7 +340,7 @@ public class ChessTab extends Tab {
             chessGrid.getRowConstraints().add(new RowConstraints(5, Control.USE_COMPUTED_SIZE, Double.POSITIVE_INFINITY, Priority.ALWAYS, VPos.CENTER, true));
         }
 
-        chessGrid.setPadding(new Insets(25, 25, 25, 25));
+        chessGrid.setPadding(new Insets(25, 25, 0, 0));
 
         return chessGrid;
     }
@@ -488,7 +490,7 @@ public class ChessTab extends Tab {
                     int pocetPostavicekVeHrePoTahu = chessGame.getNumberOfAliveFigures();
                     changeOfPawn = '-';
                     Figure tmpFig = chessGame.getBoard().getField(d_col,d_row).get();
-                    if (tmpFig != null && tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
+                    if ((!chessGame.isMate(true) && !chessGame.isMate(false)) && tmpFig != null && tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
                         if ((tmpFig.isWhite() && tmpFig.getRow() == 8) || (!tmpFig.isWhite() && tmpFig.getRow() == 1)){
                             Stage winWindow = new Stage();
                             winWindow.setTitle("Vyber postavičku");
@@ -540,10 +542,14 @@ public class ChessTab extends Tab {
                         sideListView.getItems().remove(sideListView.getItems().size()-1);
                     }
                     if (chessGame.isWhitesTurn()){
-                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x") + ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn + (chessGame.isMate(true) ? "#" : (chessGame.isCheck(true) ? "+" : "")));
+                        String q1 = (chessGame.isMate(false) ? "#" : (chessGame.isCheck(false) ? "+" : ""));
+                        System.out.println("white "+changeOfPawn);
+                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x") + ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn)+q1;
                     }
                     else {
-                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x")+ ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn) + (chessGame.isMate(false) ? "#" : (chessGame.isCheck(false) ? "+" : "")));
+                        String q1 = (chessGame.isMate(true) ? "#" : (chessGame.isCheck(true) ? "+" : ""));
+                        System.out.println("black "+changeOfPawn);
+                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x")+ ((char) (d_col + 'a' - 1)) + d_row + (changeOfPawn == '-' ? "" : changeOfPawn) + q1);
                         lastWhitesMove = "";
                         lapsCounter++;
                     }
@@ -633,7 +639,7 @@ public class ChessTab extends Tab {
         if (!chessGame.move(chessGame.getBoard().getField(notation.getSrcCol(isWhite), notation.getSrcRow(isWhite)).get(),chessGame.getBoard().getField(notation.getDecCol(isWhite),notation.getDesRow(isWhite)))) {
             return false;
         }
-        if (notation.isTakeFigure(true) && numFig != chessGame.getNumberOfAliveFigures()-1) {
+        if (notation.isTakeFigure(isWhite) && numFig-1 != chessGame.getNumberOfAliveFigures()) {
             return false;
         }
         if (chessGame.isCheck(isWhite) != notation.isCheck(isWhite)) {
