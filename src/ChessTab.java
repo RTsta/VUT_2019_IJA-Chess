@@ -441,8 +441,10 @@ public class ChessTab extends Tab {
                 int s_row = parseRowFromID(srcClick);
                 int d_col = parseColFromID(destClick);
                 int d_row = parseRowFromID(destClick);
+                int pocetPostavicekVeHrePredTahem = chessGame.getNumberOfAliveFigures();
                 Boolean a = chessGame.move(chessGame.getBoard().getField(s_col, s_row).get(), chessGame.getBoard().getField(d_col,d_row));
                 if (a) {
+                    int pocetPostavicekVeHrePoTahu = chessGame.getNumberOfAliveFigures();
                     Figure tmpFig = chessGame.getBoard().getField(d_col,d_row).get();
                     if (tmpFig != null && tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
                         if ((tmpFig.isWhite() && tmpFig.getRow() == 8) || (!tmpFig.isWhite() && tmpFig.getRow() == 1)){
@@ -489,10 +491,10 @@ public class ChessTab extends Tab {
                         }
                     }
                     if (chessGame.isWhitesTurn()){
-                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row;
+                        lastWhitesMove = chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x") + ((char) (d_col + 'a' - 1)) + d_row;
                     }
                     else {
-                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row + ((char) (d_col + 'a' - 1)) + d_row);
+                        sideListView.getItems().add(lapsCounter + ". " + lastWhitesMove +" "+chessGame.getBoard().getField(d_col, d_row).get().getShortcut() + ((char) ((s_col) + 'a' - 1)) + s_row +(pocetPostavicekVeHrePredTahem <= pocetPostavicekVeHrePoTahu? "":"x")+ ((char) (d_col + 'a' - 1)) + d_row);
                         lastWhitesMove = "";
                         lapsCounter++;
                     }
@@ -602,6 +604,11 @@ public class ChessTab extends Tab {
         }
     }
 
+    /**
+     * Metoda, která ukládá text do souboru
+     * @param content Text určený k uložení
+     * @param file Cílový soubor, kam má být text zapsán
+     */
     private void saveTextToFile(String content, File file) {
         try {
             PrintWriter writer;
