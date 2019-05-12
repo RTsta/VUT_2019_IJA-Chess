@@ -23,9 +23,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.concurrent.TimeUnit;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ChessTab extends Tab {
 
@@ -39,6 +45,7 @@ public class ChessTab extends Tab {
     private Button rldBtn;
     private Button playBtn;
     private Button pauseBtn;
+    private Button exportBtn;
 
     private Label checkLabel;
     private Label turnsLabel;
@@ -103,12 +110,41 @@ public class ChessTab extends Tab {
                     topNavigationButtons.getChildren().addAll(btn2, btn3, btn1);
                     topNavigationButtons.setAlignment(Pos.BOTTOM_LEFT);
 
+                    this.exportBtn = new Button();
+                    exportBtn.setText("Exportovat tahy");
+                    exportBtn.setAlignment(Pos.CENTER);
+                    exportBtn.setOnAction((ActionEvent event) -> {
+                        String a = sideListView.itemsProperty().getValue().toString();
+                        a = a.replace(", ","\n");
+                        a = a.substring(1,a.length()-1);
+                        System.out.println(a);
+
+                        Stage exportWindow = new Stage();
+                        exportWindow.setTitle("Export");
+
+                        FileChooser fileChooser = new FileChooser();
+
+                        //Set extension filter for text files
+                        FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+                        fileChooser.getExtensionFilters().add(extFilter);
+
+                        //Show save file dialog
+
+                        File file = fileChooser.showSaveDialog(exportWindow);
+
+                        if (file != null) {
+                            saveTextToFile(a, file);
+                        }
+
+                    });
+
                 leftSideListBox.getChildren().addAll(topNavigationButtons, sideListView, sideImportTextArea);
 
                     btn1.setOnAction((ActionEvent event) -> {
                         leftSideListBox.getChildren().remove(sideImportTextArea);
                         topNavigationButtons.getChildren().remove(btn1);
                         topNavigationButtons.getChildren().addAll(rldBtn, playBtn,pauseBtn);
+                        leftSideListBox.getChildren().add(exportBtn);
                         gameTouched = true;
                         if (!importMoves(sideImportTextArea.getText())) {
                             // TODO error okno
@@ -390,6 +426,7 @@ public class ChessTab extends Tab {
             leftSideListBox.getChildren().remove(sideImportTextArea);
             topNavigationButtons.getChildren().remove(btn1);
             topNavigationButtons.getChildren().addAll(rldBtn, playBtn,pauseBtn);
+            leftSideListBox.getChildren().add(exportBtn);
             gameTouched = true;
         }
         if (evenClick) {
@@ -562,6 +599,17 @@ public class ChessTab extends Tab {
     private void reload() {
         while (chessGame.getListPos() >= 0) {
             chessGame.undo();
+        }
+    }
+
+    private void saveTextToFile(String content, File file) {
+        try {
+            PrintWriter writer;
+            writer = new PrintWriter(file);
+            writer.println(content);
+            writer.close();
+        } catch (IOException ex) {
+            Logger.getLogger(ChessTab.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

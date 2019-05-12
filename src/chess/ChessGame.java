@@ -144,7 +144,7 @@ public class ChessGame implements Game {
     /**
      * Metoda testující jestli nastal šach ve hře a případně nastavuje příznak check
      *
-     * <p>Nejprve se naleznou oba králové. Pokud nebyli nalezeni -> mat a konec hry.
+     * <p>Nejprve se naleznou oba králové. Pokud nebyli nalezeni - mat a konec hry.
      * Jinak se u všech figurek na šachovnici vyzkouší, zda mohou protivníkova krále vyhodit</p>
      * */
     private void testCheck() {

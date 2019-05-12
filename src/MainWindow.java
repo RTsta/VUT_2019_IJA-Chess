@@ -26,7 +26,7 @@ public class MainWindow extends Application {
 
     /**
      * Vstupní metoda JavaFx
-     * @param primaryStage
+     * @param primaryStage hlavní Stage
      */
     @Override
     public void start(Stage primaryStage) {
