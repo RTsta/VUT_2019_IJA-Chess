@@ -183,11 +183,21 @@ public class ChessGame implements Game {
                     if (tmpFig != null) {
                         if (tmpFig.isWhite()) {
                             if (tmpFig.move(board.getField(kingB.getCol(),kingB.getRow()),board,false)) {
-                                this.blackCheck = true;
+                                if (tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
+                                    Pesak pesak = (Pesak)tmpFig;
+                                    this.blackCheck = pesak.isCanTake();
+                                } else {
+                                    this.blackCheck = true;
+                                }
                             }
                         } else {
                             if (tmpFig.move(board.getField(kingW.getCol(),kingW.getRow()),board,false)) {
-                                this.whiteCheck = true;
+                                if (tmpFig.getClass().getName().toLowerCase().compareTo("figures.pesak") == 0) {
+                                    Pesak pesak = (Pesak)tmpFig;
+                                    this.whiteCheck = pesak.isCanTake();
+                                } else {
+                                    this.whiteCheck = true;
+                                }
                             }
                         }
                     }

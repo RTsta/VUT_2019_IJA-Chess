@@ -14,13 +14,16 @@ import board.Field;
 
 public class Pesak extends AbstractFigure{
 
-    private Boolean beenMoved;
+    private boolean beenMoved;
+
+    private boolean canTake;
 
     public Pesak(int col, int row, boolean isWhite){
 
         super(col, row, isWhite);
-        shortcut = "";
-        beenMoved = false;
+        this.shortcut = "";
+        this.beenMoved = false;
+        this.canTake = false;
     }
 
     /*
@@ -38,6 +41,7 @@ public class Pesak extends AbstractFigure{
      */
     @Override
     public boolean move(Field field, Board board, boolean realMove){
+        this.canTake = false;
         if(field.getCol() == this.col && field.getRow() - this.row == (isWhite ? 1 : -1) && field.get() == null){
             if (realMove) {
                 board.getField(this.col, this.row).remove();
@@ -51,8 +55,9 @@ public class Pesak extends AbstractFigure{
                 this.reposition(field, board);
                 beenMoved = true;
             }
+            this.canTake = true;
             return true;
-        } else if (beenMoved == false && field.getCol() == this.col && field.getRow() - this.row == (isWhite ? 2 : -2) && field.get() == null){
+        } else if (this.beenMoved == false && field.getCol() == this.col && field.getRow() - this.row == (isWhite ? 2 : -2) && field.get() == null){
             if (realMove) {
                 this.reposition(field, board);
                 beenMoved = true;
@@ -60,5 +65,9 @@ public class Pesak extends AbstractFigure{
             return true;
         }
         return false;
+    }
+
+    public boolean isCanTake() {
+        return this.canTake;
     }
 }
