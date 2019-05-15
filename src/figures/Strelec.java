@@ -54,7 +54,7 @@ public class Strelec extends AbstractFigure{
         if ((startRow < endRow)) {
             dir += "U";
         } else {
-            dir += "S";
+            dir += "D";
         }
 
         while (!(startCol == endCol && startRow == endRow)) {
