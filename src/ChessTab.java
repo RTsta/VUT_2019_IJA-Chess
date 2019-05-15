@@ -185,6 +185,7 @@ public class ChessTab extends Tab {
                             //try {
                             //    TimeUnit.SECONDS.sleep(2);
                             //} catch (InterruptedException e) {}
+                            displayGame();
                         }
                     });
 
