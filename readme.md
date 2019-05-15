@@ -1,5 +1,4 @@
 # IJA projekt 2019 - Šachy
--
 
 ![](./game.png)
 ## Autoři
