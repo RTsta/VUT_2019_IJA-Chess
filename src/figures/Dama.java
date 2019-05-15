@@ -39,6 +39,21 @@ public class Dama extends AbstractFigure {
         int endCol = field.getCol();
         int endRow = field.getRow();
         boolean rook = (startCol == endCol || startRow == endRow);
+        String dir = "";
+
+        if ((startCol < endCol)) {
+            dir += "R";
+        } else {
+            dir += "L";
+        }
+
+        if ((startRow < endRow)) {
+            dir += "U";
+        } else {
+            dir += "S";
+        }
+
+
         while (!(startCol == endCol && startRow == endRow)) {
             if (rook) {
                 if (startCol != endCol) {
@@ -48,11 +63,33 @@ public class Dama extends AbstractFigure {
                     startRow += startRow < endRow ? 1 : -1;
                 }
             } else {
-                startCol += startCol < endCol ? 1 : -1;
-                startRow += startRow < endRow ? 1 : -1;
+                switch (dir) {
+                    case "RU":
+                        startCol++;
+                        startRow++;
+                        break;
+                    case "RD":
+                        startCol++;
+                        startRow--;
+                        break;
+                    case "LU":
+                        startCol--;
+                        startRow++;
+                        break;
+                    case "LD":
+                        startCol--;
+                        startRow--;
+                        break;
+                    default:
+                        break;
+                }
+                if (board.getField(startCol, startRow) == null) {
+                    return false;
+                }
+                if (board.getField(startCol, startRow).get() != null && !(startCol == endCol && startRow == endRow)) {
+                    return false;
+                }
             }
-            if (board.getField(startCol, startRow) == null) { return false; }
-            if(board.getField(startCol, startRow).get() != null && !(startCol == endCol && startRow == endRow)){ return false; }
         }
         return realMove ? finalMove(field, board): true;
     }

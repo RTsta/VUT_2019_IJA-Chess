@@ -187,7 +187,8 @@ public class ChessGame implements Game {
                                     Pesak pesak = (Pesak)tmpFig;
                                     this.blackCheck = pesak.isCanTake();
                                 } else {
-                                    this.blackCheck = true;
+                                    if (tmpFig.move(board.getField(kingB.getCol(),kingB.getRow()),board,false)) // pro kontrolu
+                                        this.blackCheck = true;
                                 }
                             }
                         } else {

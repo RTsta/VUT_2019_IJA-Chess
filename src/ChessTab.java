@@ -644,9 +644,10 @@ public class ChessTab extends Tab {
         if (notation.isTakeFigure(isWhite) && numFig-1 != chessGame.getNumberOfAliveFigures()) {
             return false;
         }
+        /*
         if (chessGame.isCheck(isWhite) != notation.isCheck(isWhite)) {
             return false;
-        }
+        }*/
         if (chessGame.isMate(isWhite) != notation.isMate(isWhite)) {
             return false;
         }
